@@ -19,3 +19,7 @@ mono_crash.*.json
 =======
 /android/
 >>>>>>> 188c49c (Initial commit)
+
+# Ide ignores
+.idea
+.vscode
