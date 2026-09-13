@@ -1,6 +1,16 @@
 extends CharacterBody2D
 class_name Movement
 
+### CAMERA ###
+##############
+
+@onready var camera_rig: Node2D = $CameraRig
+
+const CAMERA_HORIZONTAL_OFFSET: float = 10
+const CAMERA_VERTICAL_OFFSET: float = 5
+const CAMERA_HORIZONTAL_CLIP: float = 20
+const CAMERA_VERTICAL_CLIP: float = 10
+
 ### ANIMATION ###
 #################
 
@@ -22,10 +32,15 @@ const MIN_SLOW_DOWN_SPEED: float = 33.75
 const WALK_ACCELERATION: float = 133.59375
 const WALK_FRICTION: float = 500.8125
 
+# Dash movement
+const DASH_DURATION: float = 0.1
+const DASH_TIMEOUT: float = 0.5
+const DASH_VELOCITY: float = 400
+
 # Moving vertical
 const JUMP_SPEED: int = -240
 const LONG_JUMP_GRAVITY: int = 450
-const GRAVITY: int = 1500
+const GRAVITY: int = 1100
 
 const START_JUMPING_TIME: float = 0.5
 
@@ -38,9 +53,14 @@ var walk_to_the_left: bool = false
 var is_jumping: bool = false
 var is_start_jumping: bool = false
 var is_falling: bool = false
+var is_dashing: bool = false
 
 var input_axis: Vector2 = Vector2.ZERO
 var speed_scale = 0.0
+
+var dashed_during_jump: bool = false
+var dash_cooldown: bool = false
+var previous_dash_velocity: Vector2 = Vector2.ZERO
 
 var min_speed = MIN_SPEED
 var max_speed = MAX_SPEED
@@ -54,10 +74,12 @@ func _ready() -> void:
 func _process(_delta):
 	process_input()
 	process_animation()
+	process_camera_rig()
 	
 func _physics_process(delta):
 	process_jump(delta)
 	process_walk(delta)
+	process_dash(delta)
 
 	move_and_slide()
 
@@ -68,6 +90,12 @@ func _on_sprite_animation_finished() -> void:
 		if animation_name == "start jump":
 			is_start_jumping = false
 			is_jumping = true
+		elif animation_name == "jump" and is_falling:
+			sprite.speed_scale = SPRITE_IDLE_SPEED * 20
+			sprite.play("jump to flying")
+		elif animation_name == "jump to flying" and is_falling:
+			sprite.speed_scale = SPRITE_IDLE_SPEED
+			sprite.play("flying")
 		elif animation_name == "idle" or animation_name == "idle blink":
 			if (randi() % 50) > 30:
 				sprite.play("idle blink")
@@ -81,7 +109,7 @@ func _on_sprite_animation_finished() -> void:
 
 func process_input():
 	input_axis.x = Input.get_axis("move_left", "move_right")
-	input_axis.y = Input.get_axis("move_jump", "crouch")
+	input_axis.y = - Input.get_action_strength("move_jump")
 
 func process_jump(delta: float):
 	if is_on_floor():
@@ -112,8 +140,11 @@ func process_jump(delta: float):
 	if velocity.y > 0:
 		is_jumping = false
 		is_falling = true
-	elif is_on_floor():
+	elif is_on_floor() and is_falling:
 		is_falling = false
+		
+		if input_axis.x == 0:
+			velocity.x = 0
 		
 func process_walk(delta: float):
 	if input_axis.x:
@@ -121,19 +152,18 @@ func process_walk(delta: float):
 			is_facing_left = input_axis.x < 0.0
 			walk_to_the_left = velocity.x < 0.0
 			
-		if is_on_floor():
-			min_speed = MIN_SPEED
+		min_speed = MIN_SPEED
 
-			is_facing_left = input_axis.x < 0.0
-			walk_to_the_left = velocity.x < 0.0
-			if (is_facing_left and walk_to_the_left) or (!is_facing_left and !walk_to_the_left) or velocity.x == 0:
-				# Walking in the same direction as the velocity
-				acceleration = WALK_ACCELERATION
-				var target_speed: float = input_axis.x * MAX_SPEED
-				velocity.x = move_toward(velocity.x, target_speed, acceleration * delta)
-			else:
-				# Walking opposite to the velocity, first get to zero velocity
-				velocity.x = move_toward(velocity.x, 0.0, deacceleration * delta)
+		is_facing_left = input_axis.x < 0.0
+		walk_to_the_left = velocity.x < 0.0
+		if (is_facing_left and walk_to_the_left) or (!is_facing_left and !walk_to_the_left) or velocity.x == 0:
+			# Walking in the same direction as the velocity
+			acceleration = WALK_ACCELERATION
+			var target_speed: float = input_axis.x * MAX_SPEED
+			velocity.x = move_toward(velocity.x, target_speed, acceleration * delta)
+		else:
+			# Walking opposite to the velocity, first get to zero velocity
+			velocity.x = move_toward(velocity.x, 0.0, deacceleration * delta)
 
 
 	elif is_on_floor() and velocity.x:
@@ -151,22 +181,50 @@ func process_walk(delta: float):
 
 	speed_scale = abs(velocity.x) / MAX_SPEED
 
+func process_dash(delta: float):
+	if Input.is_action_just_pressed("move_dash") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
+		previous_dash_velocity = velocity
+		velocity.x = -DASH_VELOCITY if is_facing_left else DASH_VELOCITY
+		is_dashing = true
+		get_tree().create_timer(DASH_DURATION).timeout.connect(dash_done)
+
+func dash_done():
+	velocity = previous_dash_velocity
+	is_dashing = false
+	dash_cooldown = true
+	get_tree().create_timer(DASH_TIMEOUT).timeout.connect(func(): dash_cooldown = false)
+
 func process_animation():
 	var animation_name: StringName = sprite.animation
 	sprite.flip_h = !is_facing_left
 	
-	if velocity:
+	if velocity and animation_name != "jump to flying":
 		sprite.speed_scale = max(1.4, speed_scale * 5.0)
 
 	if is_start_jumping:
 		sprite.speed_scale = SPRITE_START_JUMPING_SPEED
 		sprite.play("start jump")
+	elif is_dashing:
+		sprite.play("flying")
+	elif is_falling and animation_name != "jump" and animation_name != "jump to flying":
+		sprite.play("flying")
 	elif is_jumping:
 		sprite.play("jump")
-	elif is_falling:
-		sprite.play("flying")
-	elif input_axis.x or velocity.x:
+	elif (input_axis.x or velocity.x) and !is_falling:
 		sprite.play("run")
-	elif animation_name != "idle blink":
+	elif animation_name != "idle blink" and !is_falling:
 		sprite.speed_scale = SPRITE_IDLE_SPEED
 		sprite.play("idle")
+
+func process_camera_rig():
+	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * 0.1
+	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * 0.1
+	
+	# Clipping
+	if CAMERA_HORIZONTAL_CLIP < abs(camera_rig.position.x):
+		var dir = camera_rig.position.x / abs(camera_rig.position.x)
+		camera_rig.position.x = dir * CAMERA_HORIZONTAL_CLIP
+
+	if CAMERA_VERTICAL_CLIP < abs(camera_rig.position.y):
+		var dir = camera_rig.position.y / abs(camera_rig.position.y)
+		camera_rig.position.y = dir * CAMERA_VERTICAL_CLIP

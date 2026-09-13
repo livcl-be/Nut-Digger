@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://pruk5dfmxaeo" path="res://assets/player/Squirrel_anim-Sheet.png" id="2_bnbr5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i0ujt"]
-size = Vector2(44, 32)
+size = Vector2(20, 18)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pjthe"]
 atlas = ExtResource("2_bnbr5")
@@ -42,6 +42,22 @@ region = Rect2(100, 80, 50, 40)
 atlas = ExtResource("2_bnbr5")
 region = Rect2(200, 40, 50, 40)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_bnbr5"]
+atlas = ExtResource("2_bnbr5")
+region = Rect2(0, 200, 50, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ld6xm"]
+atlas = ExtResource("2_bnbr5")
+region = Rect2(50, 200, 50, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_b0njx"]
+atlas = ExtResource("2_bnbr5")
+region = Rect2(100, 200, 50, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wojqf"]
+atlas = ExtResource("2_bnbr5")
+region = Rect2(150, 200, 50, 40)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_qgbno"]
 atlas = ExtResource("2_bnbr5")
 region = Rect2(0, 120, 50, 40)
@@ -61,14 +77,6 @@ region = Rect2(150, 120, 50, 40)
 [sub_resource type="AtlasTexture" id="AtlasTexture_g2g7w"]
 atlas = ExtResource("2_bnbr5")
 region = Rect2(200, 120, 50, 40)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ld6xm"]
-atlas = ExtResource("2_bnbr5")
-region = Rect2(0, 40, 50, 40)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_b0njx"]
-atlas = ExtResource("2_bnbr5")
-region = Rect2(50, 40, 50, 40)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wk5fe"]
 atlas = ExtResource("2_bnbr5")
@@ -155,6 +163,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_bnbr5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ld6xm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_b0njx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wojqf")
+}],
+"loop": 1,
+"name": &"jump to flying",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_qgbno")
 }, {
 "duration": 1.0,
@@ -174,12 +199,6 @@ animations = [{
 "speed": 5.0
 }, {
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ld6xm")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_b0njx")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wk5fe")
 }, {
@@ -215,12 +234,17 @@ animations = [{
 script = ExtResource("1_cxq7b")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1402347605]
-position = Vector2(-1, 3)
+position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_i0ujt")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=2093633842]
 sprite_frames = SubResource("SpriteFrames_bnbr5")
-animation = &"idle blink"
+animation = &"jump to flying"
+frame_progress = 0.09827227
+
+[node name="CameraRig" type="Node2D" parent="." unique_id=320918911]
+
+[node name="PlayerCamera" type="Camera2D" parent="CameraRig" unique_id=1262718913]
 
 [connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
 [connection signal="sprite_frames_changed" from="Sprite" to="." method="_on_sprite_sprite_frames_changed"]

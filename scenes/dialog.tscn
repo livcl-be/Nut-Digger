@@ -1,0 +1,25 @@
+[gd_scene format=3 uid="uid://cyxu0dpyrpb6v"]
+
+[ext_resource type="Texture2D" uid="uid://bqjpr4sb82mfj" path="res://assets/dialog/dialog_placeholder.png" id="1_pkx4w"]
+[ext_resource type="Script" uid="uid://ck1fkv8xkeeqv" path="res://scripts/dialog.gd" id="1_tmfn4"]
+[ext_resource type="FontFile" uid="uid://bun7j50vp6gym" path="res://assets/AsepriteFont.ttf" id="3_auqi6"]
+
+[node name="Dialog" type="Node2D" unique_id=284389127]
+script = ExtResource("1_tmfn4")
+
+[node name="Placeholder_background" type="Sprite2D" parent="." unique_id=614673824]
+position = Vector2(80, 72)
+texture = ExtResource("1_pkx4w")
+
+[node name="Question" type="Label" parent="." unique_id=1182218010]
+offset_left = 6.0
+offset_top = 70.0
+offset_right = 90.0
+offset_bottom = 144.0
+theme_override_constants/line_spacing = -3
+theme_override_fonts/font = ExtResource("3_auqi6")
+text = "dit is een test is een test want dit werkt blijkbaar goed"
+autowrap_mode = 3
+clip_text = true
+
+[node name="NPC" type="Sprite2D" parent="." unique_id=1857904422]
