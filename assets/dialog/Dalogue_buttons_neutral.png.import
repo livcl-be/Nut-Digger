@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpppsxja40f01"
-path="res://.godot/imported/Dialogue background1.png-c0738adf0b63477d166556d497a19526.ctex"
+uid="uid://dq3myy2g7e7i"
+path="res://.godot/imported/Dalogue_buttons_neutral.png-5dddf77058c4ca1c607fc1d03149b50d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialog/Dialogue background1.png"
-dest_files=["res://.godot/imported/Dialogue background1.png-c0738adf0b63477d166556d497a19526.ctex"]
+source_file="res://assets/dialog/Dalogue_buttons_neutral.png"
+dest_files=["res://.godot/imported/Dalogue_buttons_neutral.png-5dddf77058c4ca1c607fc1d03149b50d.ctex"]
 
 [params]
 
