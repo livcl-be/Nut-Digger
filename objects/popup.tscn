@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://1ygxv0iubk0p"]
+
+[ext_resource type="Texture2D" uid="uid://2w6fibmy0wrt" path="res://assets/dialog/textPopup.png" id="1_tw1fd"]
+[ext_resource type="FontFile" uid="uid://bf30wbxxprmdl" path="res://assets/aseprite-mini.otf" id="2_415nw"]
+
+[node name="Popup" type="Control" unique_id=991040805]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -53.5
+offset_top = -40.0
+offset_right = -13.5
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=322103940]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 87.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_tw1fd")
+stretch_mode = 2
+
+[node name="Text" type="Label" parent="." unique_id=1583834204]
+custom_minimum_size = Vector2(99, 58)
+custom_maximum_size = Vector2(99.1, 58.1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 83.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.13333334, 0.37254903, 0.4627451, 1)
+theme_override_constants/line_spacing = 2
+theme_override_fonts/font = ExtResource("2_415nw")
+theme_override_font_sizes/font_size = 5
+text = "dit is een test is een test want dit werkt blijkbaar goed"
+autowrap_mode = 3
+clip_text = true
+metadata/_edit_use_anchors_ = true

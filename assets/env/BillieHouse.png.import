@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2w6fibmy0wrt"
-path="res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"
+uid="uid://c7xtvmvx48x48"
+path="res://.godot/imported/BillieHouse.png-20962f9215f6e66cc342dff1bfa25d83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialog/textPopup.png"
-dest_files=["res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"]
+source_file="res://assets/env/BillieHouse.png"
+dest_files=["res://.godot/imported/BillieHouse.png-20962f9215f6e66cc342dff1bfa25d83.ctex"]
 
 [params]
 

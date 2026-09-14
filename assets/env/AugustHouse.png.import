@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2w6fibmy0wrt"
-path="res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"
+uid="uid://coshyc5bfl4ae"
+path="res://.godot/imported/AugustHouse.png-d28b66c9e5dcffe239ce642e06a17d15.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialog/textPopup.png"
-dest_files=["res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"]
+source_file="res://assets/env/AugustHouse.png"
+dest_files=["res://.godot/imported/AugustHouse.png-d28b66c9e5dcffe239ce642e06a17d15.ctex"]
 
 [params]
 

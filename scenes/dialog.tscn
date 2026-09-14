@@ -6,7 +6,7 @@
 [ext_resource type="FontFile" uid="uid://bf30wbxxprmdl" path="res://assets/aseprite-mini.otf" id="3_tmfn4"]
 [ext_resource type="Texture2D" uid="uid://bf6o75awyjwsy" path="res://assets/dialog/Dialogue_billie.png" id="3_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://bp7lngldevtai" path="res://assets/dialog/Dalogue_buttons_highlighted.png" id="4_auqi6"]
-[ext_resource type="Texture2D" uid="uid://cxq4n0aleqece" path="res://assets/dialog/Dialogue_francis.png" id="4_ygo2i"]
+[ext_resource type="Texture2D" uid="uid://gic03x12d0vc" path="res://assets/dialog/Dialogue_francis.png" id="4_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://dq3myy2g7e7i" path="res://assets/dialog/Dalogue_buttons_neutral.png" id="5_lar43"]
 
 [node name="Dialog" type="Node2D" unique_id=284389127]
@@ -141,3 +141,6 @@ offset_transform_position = Vector2(0, 38)
 texture = ExtResource("5_lar43")
 expand_mode = 2
 stretch_mode = 2
+
+[node name="Camera" type="Camera2D" parent="." unique_id=17302104]
+anchor_mode = 0

@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://ct36ujvnwuqcg"]
+
+[ext_resource type="Texture2D" uid="uid://coshyc5bfl4ae" path="res://assets/env/AugustHouse.png" id="1_reixx"]
+[ext_resource type="PackedScene" uid="uid://c8auxxr2pgt5q" path="res://objects/character.tscn" id="2_uhids"]
+[ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="3_yxilm"]
+[ext_resource type="PackedScene" uid="uid://1ygxv0iubk0p" path="res://objects/popup.tscn" id="4_reixx"]
+
+[sub_resource type="DrawableTexture2D" id="DrawableTexture2D_kh352"]
+
+[node name="Home" type="Node2D" unique_id=1633483265]
+
+[node name="scene" type="Node2D" parent="." unique_id=402617013]
+
+[node name="Background" type="Sprite2D" parent="scene" unique_id=1616578642]
+modulate = Color(0.13333334, 0.37254903, 0.4627451, 1)
+position = Vector2(75, 67)
+scale = Vector2(23.84375, 18.640623)
+texture = SubResource("DrawableTexture2D_kh352")
+
+[node name="AugustHouse" type="Sprite2D" parent="scene" unique_id=1054907030]
+position = Vector2(120, 80)
+texture = ExtResource("1_reixx")
+
+[node name="Boundry" type="StaticBody2D" parent="." unique_id=404976048]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Boundry" unique_id=1371832873]
+position = Vector2(-50.5, 65.5)
+scale = Vector2(6.05, 7.55)
+polygon = PackedVector2Array(48.01653, -8.675496, 48.01653, 11.589404, 8.347107, 11.721854, 8.347107, -8.675496, 48.01653, -8.675496, 49.008263, -9.337748, 5.702479, -15.695364, -0.909091, 20.198677, 62.727272, 20.596027, 50.991734, -9.735099)
+
+[node name="Actions" type="Node" parent="." unique_id=125414528]
+
+[node name="Player" parent="." unique_id=363534456 instance=ExtResource("2_uhids")]
+position = Vector2(219, 134)
+CAMERA_MOVED_UPWARDS = 15.0
+is_facing_left = true
+
+[node name="August_action" parent="." unique_id=2063205134 instance=ExtResource("3_yxilm")]
+position = Vector2(169, 128)
+go_to_dialog = true
+
+[node name="Teapot_action" parent="." unique_id=1923495329 instance=ExtResource("3_yxilm")]
+position = Vector2(207, 133)
+enable_popup = true
+message = "TTTTTTTEEEEESSSSTTTTTTTT"
+popup = ExtResource("4_reixx")

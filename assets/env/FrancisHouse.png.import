@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2w6fibmy0wrt"
-path="res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"
+uid="uid://dpfujib41gooa"
+path="res://.godot/imported/FrancisHouse.png-26cb9003a9624381552ec80da9fa45a7.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialog/textPopup.png"
-dest_files=["res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"]
+source_file="res://assets/env/FrancisHouse.png"
+dest_files=["res://.godot/imported/FrancisHouse.png-26cb9003a9624381552ec80da9fa45a7.ctex"]
 
 [params]
 

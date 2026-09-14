@@ -12,7 +12,7 @@ var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
-func collected_a_fireflies() -> void:
+func append_fireflies() -> void:
 	collected_fireflies += 1
 
 func has_collected_all_fireflies() -> bool:
@@ -42,8 +42,7 @@ func goto_scene(path):
 	_deferred_goto_scene.call_deferred(path)
 
 
-func _deferred_goto_scene(path):
-	print_debug(main_scene.process_mode)
+func _deferred_goto_scene(path: String):
 	main_scene.process_mode = ProcessMode.PROCESS_MODE_DISABLED
 
 	# Load the new scene.
@@ -55,8 +54,8 @@ func _deferred_goto_scene(path):
 	get_tree().current_scene = loaded_scene
 
 func goback_scene():
-	_deferred_goback_scene()
-
-func _deferred_goback_scene():
-	loaded_scene.free()
+	loaded_scene.queue_free()
+	if main_scene.has_node("Player"):
+		main_scene.get_node("Player").make_camera_active()
+		
 	main_scene.process_mode = ProcessMode.PROCESS_MODE_ALWAYS

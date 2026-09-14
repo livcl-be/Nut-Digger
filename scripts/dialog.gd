@@ -85,6 +85,8 @@ func _ready() -> void:
 		1: npc_image.texture = NPC_BILLIE_IMAGE
 		2: npc_image.texture = NPC_FRANCIS_IMAGE
 
+	$Camera.make_current()
+	
 	selected_npc = Global.selected_npc
 	gave_fireflies = Global.gave_fireflies
 	talked = Global.talked
@@ -115,7 +117,7 @@ func _update_dialog() -> void:
 			else:
 				gave_fireflies[selected_npc] = true
 				show_question_dialog(dialog[selected_npc]["fireflies"][1])
-				# TODO actually append to player
+				Global.append_fireflies()
 			
 			show_answer_dialog(["Go to start", "Close dialog", ""])
 		
