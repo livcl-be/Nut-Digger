@@ -1,19 +1,36 @@
 extends Node2D
 
-@onready var question_label: Label = $Question
+@onready var question_label: Label = $UI/Question
 @onready var npc_image: Sprite2D = $NPC
+
+@onready var answer_label_1: Label = $UI/Answers/Labels/AnswerLabel1
+@onready var answer_label_2: Label = $UI/Answers/Labels/AnswerLabel2
+@onready var answer_label_3: Label = $UI/Answers/Labels/AnswerLabel3
+
+@onready var answer_choise_1: TextureRect = $UI/Answers/Choises/AnswerChoise1
+@onready var answer_choise_2: TextureRect = $UI/Answers/Choises/AnswerChoise2
+@onready var answer_choise_3: TextureRect = $UI/Answers/Choises/AnswerChoise3
 
 # Images of npc's
 @export var NPC_AUGUST_IMAGE: Texture2D = null
 @export var NPC_BILLIE_IMAGE: Texture2D = null
 @export var NPC_FRANCIS_IMAGE: Texture2D = null
 
+# Images of answer highlights
+@export var ANSWER_HIGHLIGHTED: Texture2D = null
+@export var ANSWER_NOT_HIGHLIGHTED: Texture2D = null
+
 var selected_npc: int = 0
+var selected_input: int = 0
 var got_ring: bool = false
 
-var dialog_progress: int = 0
+enum dialog_progress {INTRODUCTION, FIREFLIES, WHO, LETS, PROPOSE}
+var current_progress: dialog_progress = dialog_progress.INTRODUCTION
 
-const dialog_options: Array[Variant] = ["Fireflies", "Who are you?", "Let's talk", "propose"]
+var update_gui: bool = true
+
+const dialog_options: Array[String] = ["Fireflies", "Who are you?", "Let's talk"]
+const dialog_options_with_propose: Array[String] = ["Who are you?", "Let's talk", "propose"]
 
 const dialog: Array[Variant] = [
 	{
@@ -36,15 +53,69 @@ func _ready() -> void:
 		1: npc_image.texture = NPC_BILLIE_IMAGE
 		2: npc_image.texture = NPC_FRANCIS_IMAGE
 
-	_update_dialog()
+	
 
 
 func _process(delta: float) -> void:
-	pass
+	handle_choises()
+	
+	if update_gui:
+		_update_dialog()
 
 func _update_dialog() -> void:
+	update_gui = false
+	
 	match dialog_progress:
 		0:
-			question_label.text = dialog[selected_npc]["neutral message"]
+			show_question_dialog(dialog[selected_npc]["neutral message"])
+			show_answer_dialog(dialog_options)
+			
 	
 			
+func show_question_dialog(question: String):
+	question_label.text = question
+
+func show_answer_dialog(answer: Array[String]):
+	print_debug(answer)
+	answer_label_1.text = "    " + answer[0]
+	answer_label_2.text = "    " + answer[1]
+	answer_label_3.text = "    " + answer[2]
+
+func handle_choises():
+	if Input.is_action_just_pressed("GB_up"):
+		update_gui = true
+		
+		selected_input -= 1
+		if selected_input < 0:
+			selected_input = 2
+		
+		match selected_input:
+			0:
+				answer_choise_1.texture = ANSWER_HIGHLIGHTED
+				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+			1:
+				answer_choise_2.texture = ANSWER_HIGHLIGHTED
+				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+			2:
+				answer_choise_3.texture = ANSWER_HIGHLIGHTED
+				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+			_: selected_input = 0
+
+	if Input.is_action_just_pressed("GB_down"):
+		update_gui = true
+		
+		selected_input += 1
+		if selected_input > 2:
+			selected_input = 0
+
+		match selected_input:
+			0:
+				answer_choise_1.texture = ANSWER_HIGHLIGHTED
+				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+			1:
+				answer_choise_2.texture = ANSWER_HIGHLIGHTED
+				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+			2:
+				answer_choise_3.texture = ANSWER_HIGHLIGHTED
+				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+			_: selected_input = 0
