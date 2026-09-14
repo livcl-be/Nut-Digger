@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dnfqgy0nhmquh"
-path="res://.godot/imported/foreground_tileset.png-75dc31594f7dbc92d83bc120d50a061b.ctex"
+uid="uid://dpfujib41gooa"
+path="res://.godot/imported/FrancisHouse.png-f4c26dcaff8d157ec456e87728da2ffa.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/env/foreground_tileset.png"
-dest_files=["res://.godot/imported/foreground_tileset.png-75dc31594f7dbc92d83bc120d50a061b.ctex"]
+source_file="res://assets/env/Houses/FrancisHouse.png"
+dest_files=["res://.godot/imported/FrancisHouse.png-f4c26dcaff8d157ec456e87728da2ffa.ctex"]
 
 [params]
 

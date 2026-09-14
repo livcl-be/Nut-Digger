@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpfujib41gooa"
-path="res://.godot/imported/FrancisHouse.png-26cb9003a9624381552ec80da9fa45a7.ctex"
+uid="uid://bsiq871tg1c53"
+path="res://.godot/imported/left arrow.png-a5245ecd911b2b83c914386eb80e6b67.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/env/FrancisHouse.png"
-dest_files=["res://.godot/imported/FrancisHouse.png-26cb9003a9624381552ec80da9fa45a7.ctex"]
+source_file="res://assets/env/signs/left arrow.png"
+dest_files=["res://.godot/imported/left arrow.png-a5245ecd911b2b83c914386eb80e6b67.ctex"]
 
 [params]
 
