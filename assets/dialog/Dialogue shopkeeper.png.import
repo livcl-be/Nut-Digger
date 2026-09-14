@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gic03x12d0vc"
-path="res://.godot/imported/Dialogue_francis.png-2ee2acdd458e10a82a9bc4f045b64b59.ctex"
+uid="uid://c4mp0cj707cjr"
+path="res://.godot/imported/Dialogue shopkeeper.png-0b08bd3db4c3a7c3529454a4097185f3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/dialog/Dialogue_francis.png"
-dest_files=["res://.godot/imported/Dialogue_francis.png-2ee2acdd458e10a82a9bc4f045b64b59.ctex"]
+source_file="res://assets/dialog/Dialogue shopkeeper.png"
+dest_files=["res://.godot/imported/Dialogue shopkeeper.png-0b08bd3db4c3a7c3529454a4097185f3.ctex"]
 
 [params]
 

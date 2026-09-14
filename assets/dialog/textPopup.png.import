@@ -2,26 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-<<<<<<<< HEAD:assets/dialog/textPopup.png.import
-uid="uid://17tljfsj6prl"
+uid="uid://i8twdjej8vv2"
 path="res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"
-========
-uid="uid://cxq4n0aleqece"
-path="res://.godot/imported/Dialogue_francis.png-2ee2acdd458e10a82a9bc4f045b64b59.ctex"
->>>>>>>> F_Dialog:assets/dialog/Dialogue_francis.png.import
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-<<<<<<<< HEAD:assets/dialog/textPopup.png.import
 source_file="res://assets/dialog/textPopup.png"
 dest_files=["res://.godot/imported/textPopup.png-8296e67e415eb44fa38a01154d63f1f2.ctex"]
-========
-source_file="res://assets/dialog/Dialogue_francis.png"
-dest_files=["res://.godot/imported/Dialogue_francis.png-2ee2acdd458e10a82a9bc4f045b64b59.ctex"]
->>>>>>>> F_Dialog:assets/dialog/Dialogue_francis.png.import
 
 [params]
 
