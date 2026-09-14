@@ -15,6 +15,7 @@ extends Node2D
 @export var NPC_AUGUST_IMAGE: Texture2D = null
 @export var NPC_BILLIE_IMAGE: Texture2D = null
 @export var NPC_FRANCIS_IMAGE: Texture2D = null
+@export var NPC_SHOPKEEPER_IMAGE: Texture2D = null
 
 # Images of answer highlights
 @export var ANSWER_HIGHLIGHTED: Texture2D = null
@@ -22,6 +23,9 @@ extends Node2D
 
 var selected_npc: int = 0
 var selected_input: int = 0
+
+enum shop_progress {NEUTRAL, BET, TIP, RING}
+var current_shop_progress: shop_progress = shop_progress.NEUTRAL
 
 enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
 var current_progress: progress = progress.NEUTRAL
@@ -77,6 +81,17 @@ const dialog: Array[Variant] = [
 		"proposal": ["Oh dear, uhm, how can I say this nicely...", "Jeez louise, okay let's do it!", "What a lovely surprise, of course!"],
 		"inheritance": 7000,
 	},
+
+	{
+		"name": "Shopkeeper",
+		"introduction": "Oh no you're cut off buddy. No more bets until you've repaid your debt.",
+		"neutral message": "What's up?",
+		"neutral answer": "",
+		"quest": "You know I heard about a golden ring in the dark forest, I'll give you 1k nuts for it, or you can use it to marry some rich idiot hahaha",
+		"return_no_ring": "You get the ring yet brokie?",
+		"ring": "Wow I didn't think you'd actually go get it",
+		"inheritance": 1000,
+	},
 ]
 
 func _ready() -> void:
@@ -84,6 +99,7 @@ func _ready() -> void:
 		0: npc_image.texture = NPC_AUGUST_IMAGE
 		1: npc_image.texture = NPC_BILLIE_IMAGE
 		2: npc_image.texture = NPC_FRANCIS_IMAGE
+		3: npc_image.texture = NPC_SHOPKEEPER_IMAGE
 
 	$Camera.make_current()
 	
@@ -102,47 +118,74 @@ func _process(delta: float) -> void:
 func _update_dialog() -> void:
 	update_gui = false
 	
-	match current_progress:
-		progress.NEUTRAL:
-			show_question_dialog(dialog[selected_npc]["neutral message"])
-			
-			if Global.has_collected_ring():
-				show_answer_dialog(dialog_options_with_propose)
-			else:
-				show_answer_dialog(dialog_options)
-			
-		progress.FIREFLIES:
-			if gave_fireflies[selected_npc]:
-				show_question_dialog(dialog[selected_npc]["fireflies"][1])
-			else:
-				gave_fireflies[selected_npc] = true
-				show_question_dialog(dialog[selected_npc]["fireflies"][1])
-				Global.append_fireflies()
-			
-			show_answer_dialog(["Go to start", "Close dialog", ""])
-		
-		progress.WHO:
-			show_question_dialog(dialog[selected_npc]["introduction"])
-			show_answer_dialog(["Go to start", "Close dialog", ""])
-		
-		progress.LETS:
-			if talked[selected_npc]: # Already talked to this npc
-				show_question_dialog("I think that we have talked enough.")
+	if selected_npc < 3:
+		match current_progress:
+			progress.NEUTRAL:
+				show_question_dialog(dialog[selected_npc]["neutral message"])
+				
+				if Global.has_collected_ring():
+					show_answer_dialog(dialog_options_with_propose)
+				else:
+					show_answer_dialog(dialog_options)
+				
+			progress.FIREFLIES:
+				if gave_fireflies[selected_npc]:
+					show_question_dialog(dialog[selected_npc]["fireflies"][1])
+				else:
+					gave_fireflies[selected_npc] = true
+					show_question_dialog(dialog[selected_npc]["fireflies"][1])
+					Global.append_fireflies()
+				
 				show_answer_dialog(["Go to start", "Close dialog", ""])
-			else:
-				show_question_dialog(dialog[selected_npc]["questions"][current_question])
-				show_answer_dialog(dialog[selected_npc]["answers"][current_question])
-		
-		progress.PROPOSE:
-			if npc_points[selected_npc] < 0:
-				show_question_dialog(dialog[selected_npc]["proposal"][0])
+			
+			progress.WHO:
+				show_question_dialog(dialog[selected_npc]["introduction"])
 				show_answer_dialog(["Go to start", "Close dialog", ""])
-			elif npc_points[selected_npc] == 0:
-				show_question_dialog(dialog[selected_npc]["proposal"][1])
-				show_answer_dialog(["End game", "", ""])
-			elif npc_points[selected_npc] > 0:
-				show_question_dialog(dialog[selected_npc]["proposal"][2])
-				show_answer_dialog(["End game", "", ""])
+			
+			progress.LETS:
+				if talked[selected_npc]: # Already talked to this npc
+					show_question_dialog("I think that we have talked enough.")
+					show_answer_dialog(["Go to start", "Close dialog", ""])
+				else:
+					show_question_dialog(dialog[selected_npc]["questions"][current_question])
+					show_answer_dialog(dialog[selected_npc]["answers"][current_question])
+			
+			progress.PROPOSE:
+				if npc_points[selected_npc] < 0:
+					show_question_dialog(dialog[selected_npc]["proposal"][0])
+					show_answer_dialog(["Go to start", "Close dialog", ""])
+				elif npc_points[selected_npc] == 0:
+					show_question_dialog(dialog[selected_npc]["proposal"][1])
+					show_answer_dialog(["End game", "", ""])
+				elif npc_points[selected_npc] > 0:
+					show_question_dialog(dialog[selected_npc]["proposal"][2])
+					show_answer_dialog(["End game", "", ""])
+	else:
+		match current_shop_progress:
+			shop_progress.NEUTRAL:
+				show_question_dialog(dialog[selected_npc]["neutral message"])
+
+				if Global.has_collected_ring():
+					show_answer_dialog(["I want to bet.", "Money tips?", "Ring"])
+				else:
+					show_answer_dialog(["I want to bet.", "Money tips?", "Close dialog"])
+					
+			shop_progress.BET:
+				show_question_dialog(dialog[selected_npc]["introduction"])
+				show_answer_dialog(["Go to start", "Close dialog", ""])
+				
+			shop_progress.TIP:
+				if !Global.asked_shopkeeper_moneytips:
+					Global.asked_shopkeeper_moneytips = true
+					show_question_dialog(dialog[selected_npc]["quest"])
+				else:
+					show_question_dialog(dialog[selected_npc]["return_no_ring"])
+					
+				show_answer_dialog(["Go to start", "Close dialog", ""])
+			
+			shop_progress.RING:
+				show_question_dialog(dialog[selected_npc]["ring"])
+				show_answer_dialog(["Bet", "Sell ring", ""])
 
 	
 			
@@ -157,38 +200,55 @@ func show_answer_dialog(answer: Array[Variant]):
 func _enter_input():
 	if Input.is_action_just_pressed("GB_B"):
 		update_gui = true
-		
-		match current_progress:
-			progress.NEUTRAL: current_progress = selected_input + 1
-			progress.FIREFLIES: # option 1: goto start; option 2: close
-				end_of_dialog_tree()
-			progress.WHO: # option 1: goto start; option 2: close
-				end_of_dialog_tree()
-			progress.LETS:
-				if talked[selected_npc]: # Already talked to this npc
-					end_of_dialog_tree()
-				else:
-					if selected_input == dialog[selected_npc]["correct_answers"][current_question]:
-						npc_points[selected_npc] += 1
-					elif !(selected_npc == 2 and current_question == 1) and selected_input == dialog[selected_npc]["incorrect_answers"][current_question] and current_question != 2:
-						npc_points[selected_npc] -= 1
 
-					current_question += 1
-					if current_question > 2:
-						talked[selected_npc] = true
-						
-			progress.PROPOSE:
-				if npc_points[selected_npc] < 0:
+		if selected_npc < 3:
+			match current_progress:
+				progress.NEUTRAL: current_progress = (selected_input + 1 + (1 if Global.has_collected_ring() else 0)) as progress
+				progress.FIREFLIES: # option 1: goto start; option 2: close
 					end_of_dialog_tree()
-				elif selected_input == 0:
-					pass # TODO end game
+				progress.WHO: # option 1: goto start; option 2: close
+					end_of_dialog_tree()
+				progress.LETS:
+					if talked[selected_npc]: # Already talked to this npc
+						end_of_dialog_tree()
+					else:
+						if selected_input == dialog[selected_npc]["correct_answers"][current_question]:
+							npc_points[selected_npc] += 1
+						elif !(selected_npc == 2 and current_question == 1) and selected_input == dialog[selected_npc]["incorrect_answers"][current_question] and current_question != 2:
+							npc_points[selected_npc] -= 1
+	
+						current_question += 1
+						if current_question > 2:
+							talked[selected_npc] = true
+							
+				progress.PROPOSE:
+					if npc_points[selected_npc] < 0:
+						end_of_dialog_tree()
+					elif selected_input == 0:
+						pass # TODO end game
+		else:
+			match current_shop_progress:
+				shop_progress.NEUTRAL:
+					if selected_input < 2 or Global.has_collected_ring():
+						current_shop_progress = selected_input + 1 as shop_progress
+					elif selected_input == 2 and !Global.has_collected_ring():
+						close_dialog()
+	
+				shop_progress.BET: end_of_dialog_tree()
+				shop_progress.TIP: end_of_dialog_tree()
+				shop_progress.RING:
+					match selected_input:
+						0: pass # TODO Bet ring
+						1: pass # TODO Sell ring
 
 		selected_input = 0
 		_update_highlighted_choise()
 
 func end_of_dialog_tree():
 	match selected_input:
-		0: current_progress = progress.NEUTRAL
+		0:
+			current_progress = progress.NEUTRAL
+			current_shop_progress = shop_progress.NEUTRAL
 		1: close_dialog()
 
 func close_dialog():
