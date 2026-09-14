@@ -21,7 +21,11 @@ var popup_currently_active: bool = false
 var player: Node = null
 
 func _ready() -> void:
-	player = get_parent().get_node("Player")
+	if get_parent().has_node("Player"):
+		player = get_parent().get_node("Player")
+	else:
+		var root: Window = get_tree().root
+		player = root.get_child(-1).get_node("Player")
 
 func _process(delta: float) -> void:
 	_process_input()
@@ -35,6 +39,7 @@ func _process_input() -> void:
 		if enable_popup and !popup_currently_active:
 			popup_currently_active = true
 			player.show_popup(message, popup)
+			
 		elif enable_popup and popup_currently_active:
 			popup_currently_active = false
 			player.hide_popup()

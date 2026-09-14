@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://bf6o75awyjwsy" path="res://assets/dialog/Dialogue_billie.png" id="3_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://bp7lngldevtai" path="res://assets/dialog/Dalogue_buttons_highlighted.png" id="4_auqi6"]
 [ext_resource type="Texture2D" uid="uid://gic03x12d0vc" path="res://assets/dialog/Dialogue_francis.png" id="4_ygo2i"]
+[ext_resource type="Texture2D" uid="uid://c4mp0cj707cjr" path="res://assets/dialog/Dialogue shopkeeper.png" id="5_0535s"]
 [ext_resource type="Texture2D" uid="uid://dq3myy2g7e7i" path="res://assets/dialog/Dalogue_buttons_neutral.png" id="5_lar43"]
 
 [node name="Dialog" type="Node2D" unique_id=284389127]
@@ -14,6 +15,7 @@ script = ExtResource("1_tmfn4")
 NPC_AUGUST_IMAGE = ExtResource("2_owmcw")
 NPC_BILLIE_IMAGE = ExtResource("3_ygo2i")
 NPC_FRANCIS_IMAGE = ExtResource("4_ygo2i")
+NPC_SHOPKEEPER_IMAGE = ExtResource("5_0535s")
 ANSWER_HIGHLIGHTED = ExtResource("4_auqi6")
 ANSWER_NOT_HIGHLIGHTED = ExtResource("5_lar43")
 

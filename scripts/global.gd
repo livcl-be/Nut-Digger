@@ -7,6 +7,7 @@ var has_ring: bool = false
 var collected_fireflies: int = 0
 
 # Dialog non volatile variables
+var asked_shopkeeper_moneytips: bool = false
 var selected_npc: int = 0
 var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
