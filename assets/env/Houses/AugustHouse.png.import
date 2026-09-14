@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bd0pkdgdqjabw"
-path="res://.godot/imported/background tileset.png-aee1d55e6fcc7f77c55cb00456c2dc79.ctex"
+uid="uid://coshyc5bfl4ae"
+path="res://.godot/imported/AugustHouse.png-d2310560b0f9f0377d7822fc4c3f1515.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/env/background tileset.png"
-dest_files=["res://.godot/imported/background tileset.png-aee1d55e6fcc7f77c55cb00456c2dc79.ctex"]
+source_file="res://assets/env/Houses/AugustHouse.png"
+dest_files=["res://.godot/imported/AugustHouse.png-d2310560b0f9f0377d7822fc4c3f1515.ctex"]
 
 [params]
 
