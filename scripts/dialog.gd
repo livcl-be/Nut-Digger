@@ -22,7 +22,6 @@ extends Node2D
 
 var selected_npc: int = 0
 var selected_input: int = 0
-var got_ring: bool = false
 
 enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
 var current_progress: progress = progress.NEUTRAL
@@ -86,9 +85,11 @@ func _ready() -> void:
 		1: npc_image.texture = NPC_BILLIE_IMAGE
 		2: npc_image.texture = NPC_FRANCIS_IMAGE
 
+	selected_npc = Global.selected_npc
+	gave_fireflies = Global.gave_fireflies
+	talked = Global.talked
+	npc_points = Global.npc_points
 	
-
-
 func _process(delta: float) -> void:
 	_up_down_input()
 	_enter_input()
@@ -103,7 +104,7 @@ func _update_dialog() -> void:
 		progress.NEUTRAL:
 			show_question_dialog(dialog[selected_npc]["neutral message"])
 			
-			if has_collected_ring():
+			if Global.has_collected_ring():
 				show_answer_dialog(dialog_options_with_propose)
 			else:
 				show_answer_dialog(dialog_options)
@@ -180,13 +181,20 @@ func _enter_input():
 				elif selected_input == 0:
 					pass # TODO end game
 
+	selected_input = 0
+
 func end_of_dialog_tree():
 	match selected_input:
 		0: current_progress = progress.NEUTRAL
 		1: close_dialog()
 
 func close_dialog():
-	pass  #TODO close dialog screen
+	Global.selected_npc = selected_npc
+	Global.gave_fireflies = gave_fireflies
+	Global.talked = talked
+	Global.npc_points = npc_points
+	
+	Global.goback_scene()
 
 
 func _up_down_input():
