@@ -181,7 +181,8 @@ func _enter_input():
 				elif selected_input == 0:
 					pass # TODO end game
 
-	selected_input = 0
+		selected_input = 0
+		_update_highlighted_choise()
 
 func end_of_dialog_tree():
 	match selected_input:
@@ -204,18 +205,8 @@ func _up_down_input():
 		selected_input -= 1
 		if selected_input < 0:
 			selected_input = 2
-		
-		match selected_input:
-			0:
-				answer_choise_1.texture = ANSWER_HIGHLIGHTED
-				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
-			1:
-				answer_choise_2.texture = ANSWER_HIGHLIGHTED
-				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
-			2:
-				answer_choise_3.texture = ANSWER_HIGHLIGHTED
-				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
-			_: selected_input = 0
+
+		_update_highlighted_choise()
 
 	if Input.is_action_just_pressed("GB_down"):
 		update_gui = true
@@ -224,14 +215,20 @@ func _up_down_input():
 		if selected_input > 2:
 			selected_input = 0
 
-		match selected_input:
-			0:
-				answer_choise_1.texture = ANSWER_HIGHLIGHTED
-				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
-			1:
-				answer_choise_2.texture = ANSWER_HIGHLIGHTED
-				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
-			2:
-				answer_choise_3.texture = ANSWER_HIGHLIGHTED
-				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
-			_: selected_input = 0
+		_update_highlighted_choise()
+
+func _update_highlighted_choise():
+	match selected_input:
+		0:
+			answer_choise_1.texture = ANSWER_HIGHLIGHTED
+			answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+		1:
+			answer_choise_2.texture = ANSWER_HIGHLIGHTED
+			answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+		2:
+			answer_choise_3.texture = ANSWER_HIGHLIGHTED
+			answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+		_: selected_input = 0
