@@ -6,12 +6,14 @@
 [ext_resource type="FontFile" uid="uid://bf30wbxxprmdl" path="res://assets/aseprite-mini.otf" id="3_tmfn4"]
 [ext_resource type="Texture2D" uid="uid://bf6o75awyjwsy" path="res://assets/dialog/Dialogue_billie.png" id="3_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://bp7lngldevtai" path="res://assets/dialog/Dalogue_buttons_highlighted.png" id="4_auqi6"]
+[ext_resource type="Texture2D" uid="uid://cxq4n0aleqece" path="res://assets/dialog/Dialogue_francis.png" id="4_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://dq3myy2g7e7i" path="res://assets/dialog/Dalogue_buttons_neutral.png" id="5_lar43"]
 
 [node name="Dialog" type="Node2D" unique_id=284389127]
 script = ExtResource("1_tmfn4")
 NPC_AUGUST_IMAGE = ExtResource("2_owmcw")
 NPC_BILLIE_IMAGE = ExtResource("3_ygo2i")
+NPC_FRANCIS_IMAGE = ExtResource("4_ygo2i")
 ANSWER_HIGHLIGHTED = ExtResource("4_auqi6")
 ANSWER_NOT_HIGHLIGHTED = ExtResource("5_lar43")
 
@@ -33,14 +35,14 @@ offset_bottom = 40.0
 custom_minimum_size = Vector2(79, 58)
 custom_maximum_size = Vector2(81, 53)
 layout_mode = 0
-offset_left = 5.0
-offset_top = 86.0
-offset_right = 86.0
-offset_bottom = 139.0
+offset_left = 6.0
+offset_top = 87.0
+offset_right = 87.0
+offset_bottom = 140.0
 theme_override_colors/font_color = Color(0.13333334, 0.37254903, 0.4627451, 1)
 theme_override_constants/line_spacing = 2
 theme_override_fonts/font = ExtResource("3_tmfn4")
-theme_override_font_sizes/font_size = 6
+theme_override_font_sizes/font_size = 5
 text = "dit is een test is een test want dit werkt blijkbaar goed"
 autowrap_mode = 3
 clip_text = true
@@ -57,8 +59,8 @@ custom_maximum_size = Vector2(63.1, 19.3)
 layout_mode = 0
 offset_left = 92.0
 offset_top = 86.0
-offset_right = 155.1
-offset_bottom = 105.0
+offset_right = 155.0
+offset_bottom = 105.3
 theme_override_colors/font_color = Color(0.13333334, 0.37254903, 0.4627451, 1)
 theme_override_constants/line_spacing = 2
 theme_override_fonts/font = ExtResource("3_tmfn4")

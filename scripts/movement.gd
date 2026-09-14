@@ -74,7 +74,7 @@ func _ready() -> void:
 func _process(_delta):
 	process_input()
 	process_animation()
-	process_camera_rig()
+	process_camera_rig(_delta)
 	
 func _physics_process(delta):
 	process_jump(delta)
@@ -108,12 +108,12 @@ func _on_sprite_animation_finished() -> void:
 		sprite.play("idle")
 
 func process_input():
-	input_axis.x = Input.get_axis("move_left", "move_right")
-	input_axis.y = - Input.get_action_strength("move_jump")
+	input_axis.x = Input.get_axis("GB_left", "GB_right")
+	input_axis.y = - Input.get_action_strength("GB_up")
 
 func process_jump(delta: float):
 	if is_on_floor():
-		var jump_pressed: bool = Input.is_action_pressed("move_jump")
+		var jump_pressed: bool = Input.is_action_pressed("GB_up")
 		
 		if not jump_pressed and is_start_jumping:
 			is_start_jumping = false
@@ -127,7 +127,7 @@ func process_jump(delta: float):
 	else:
 		var gravity: int = GRAVITY
 
-		if Input.is_action_pressed("move_jump") and not is_falling:
+		if Input.is_action_pressed("GB_up") and not is_falling:
 			gravity = LONG_JUMP_GRAVITY
 		else:
 			is_start_jumping = false
@@ -182,7 +182,7 @@ func process_walk(delta: float):
 	speed_scale = abs(velocity.x) / MAX_SPEED
 
 func process_dash(delta: float):
-	if Input.is_action_just_pressed("move_dash") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
+	if Input.is_action_just_pressed("GB_A") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
 		previous_dash_velocity = velocity
 		velocity.x = -DASH_VELOCITY if is_facing_left else DASH_VELOCITY
 		is_dashing = true
@@ -199,7 +199,7 @@ func process_animation():
 	sprite.flip_h = !is_facing_left
 	
 	if velocity and animation_name != "jump to flying":
-		sprite.speed_scale = max(1.4, speed_scale * 5.0)
+		sprite.speed_scale = max(0.8, speed_scale * 5.0)
 
 	if is_start_jumping:
 		sprite.speed_scale = SPRITE_START_JUMPING_SPEED
@@ -216,9 +216,9 @@ func process_animation():
 		sprite.speed_scale = SPRITE_IDLE_SPEED
 		sprite.play("idle")
 
-func process_camera_rig():
-	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * 0.1
-	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * 0.1
+func process_camera_rig(delta: float):
+	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * delta * 7
+	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * delta * 7
 	
 	# Clipping
 	if CAMERA_HORIZONTAL_CLIP < abs(camera_rig.position.x):

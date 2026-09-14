@@ -22,10 +22,13 @@ extends Node2D
 
 var selected_npc: int = 0
 var selected_input: int = 0
-var got_ring: bool = false
 
-enum dialog_progress {INTRODUCTION, FIREFLIES, WHO, LETS, PROPOSE}
-var current_progress: dialog_progress = dialog_progress.INTRODUCTION
+enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
+var current_progress: progress = progress.NEUTRAL
+var current_question: int = 0
+var gave_fireflies: Array[bool] = [false, false, false]
+var talked: Array[bool] = [false, false, false]
+var npc_points: Array[int] = [0, 0, 0]
 
 var update_gui: bool = true
 
@@ -42,8 +45,37 @@ const dialog: Array[Variant] = [
 		"questions": ["What's your favourite dessert?", "Could you help me with my groceries Friday? I've been having a hard time getting them up here...", "What do you think is important in life?"],
 		"answers": [["Tiramisu", "I don't like sweets", "Macarons"], ["I don't know yet","Of course!","No, sorry"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
 		"correct_answers": [2, 1, 0],
+		"incorrect_answers": [1, 2],
 		"proposal": ["Oh sweety… I think you got the wrong idea...", "Oh, euhm okay yeah let's do it!", "YES YES 1000x YES!"],
 		"inheritance": 4000,
+	},
+
+	{
+		"name": "Billie",
+		"introduction": "Name's Billie, been on this earth for 8 whole years. Used to love golfin', but can't no more cuz of my back.",
+		"neutral message": "What do you want?",
+		"neutral answer": "I see",
+		"fireflies": ["Here take em', they're a hassle to take care of anyways…", "Don't come asking stupid questions now, Don't have 'em no more!"],
+		"questions": ["How much money ya got?", "Why are you really here? Chatting us all up?", "What do you think is important in life?"],
+		"answers": [["It's a secret", "I'm piss poor", "I prefer not to say"], ["I like old squirrels", "I'm looking for money","I want to marry"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
+		"correct_answers": [1, 1, 1],
+		"incorrect_answers": [0, 1],
+		"proposal": ["I'm in no need of a dishonest partner.", "Sure, only if you'll play scrabble with me everyday...", "You want money, I want company, it's a deal!"],
+		"inheritance": 11000,
+	},
+
+	{
+		"name": "Francis",
+		"introduction": "Alright… Hi, I'm Francis, I love nature and stuff... Oeh! And I'm always sniffing for some good deals on hiking gear!",
+		"neutral message": "What's up partner?",
+		"neutral answer": "I'll keep that in mind!",
+		"fireflies": ["Coming right up! Don't let them fly away! ", "Erm- didn't I give 'em to ya earlier? Or did I forget something again?"],
+		"questions": ["Do you prefer the forest or the lake?", "What kinds of jokes are the best?", "What do you think is important in life?"],
+		"answers": [["The forest","The lake","The indoors"], ["Knock-knock jokes", "Puns", "Little Johnny jokes"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
+		"correct_answers": [1, 1, 2],
+		"incorrect_answers": [2],
+		"proposal": ["Oh dear, uhm, how can I say this nicely...", "Jeez louise, okay let's do it!", "What a lovely surprise, of course!"],
+		"inheritance": 7000,
 	},
 ]
 
@@ -53,11 +85,14 @@ func _ready() -> void:
 		1: npc_image.texture = NPC_BILLIE_IMAGE
 		2: npc_image.texture = NPC_FRANCIS_IMAGE
 
+	selected_npc = Global.selected_npc
+	gave_fireflies = Global.gave_fireflies
+	talked = Global.talked
+	npc_points = Global.npc_points
 	
-
-
 func _process(delta: float) -> void:
-	handle_choises()
+	_up_down_input()
+	_enter_input()
 	
 	if update_gui:
 		_update_dialog()
@@ -65,41 +100,113 @@ func _process(delta: float) -> void:
 func _update_dialog() -> void:
 	update_gui = false
 	
-	match dialog_progress:
-		0:
+	match current_progress:
+		progress.NEUTRAL:
 			show_question_dialog(dialog[selected_npc]["neutral message"])
-			show_answer_dialog(dialog_options)
 			
+			if Global.has_collected_ring():
+				show_answer_dialog(dialog_options_with_propose)
+			else:
+				show_answer_dialog(dialog_options)
+			
+		progress.FIREFLIES:
+			if gave_fireflies[selected_npc]:
+				show_question_dialog(dialog[selected_npc]["fireflies"][1])
+			else:
+				gave_fireflies[selected_npc] = true
+				show_question_dialog(dialog[selected_npc]["fireflies"][1])
+				# TODO actually append to player
+			
+			show_answer_dialog(["Go to start", "Close dialog", ""])
+		
+		progress.WHO:
+			show_question_dialog(dialog[selected_npc]["introduction"])
+			show_answer_dialog(["Go to start", "Close dialog", ""])
+		
+		progress.LETS:
+			if talked[selected_npc]: # Already talked to this npc
+				show_question_dialog("I think that we have talked enough.")
+				show_answer_dialog(["Go to start", "Close dialog", ""])
+			else:
+				show_question_dialog(dialog[selected_npc]["questions"][current_question])
+				show_answer_dialog(dialog[selected_npc]["answers"][current_question])
+		
+		progress.PROPOSE:
+			if npc_points[selected_npc] < 0:
+				show_question_dialog(dialog[selected_npc]["proposal"][0])
+				show_answer_dialog(["Go to start", "Close dialog", ""])
+			elif npc_points[selected_npc] == 0:
+				show_question_dialog(dialog[selected_npc]["proposal"][1])
+				show_answer_dialog(["End game", "", ""])
+			elif npc_points[selected_npc] > 0:
+				show_question_dialog(dialog[selected_npc]["proposal"][2])
+				show_answer_dialog(["End game", "", ""])
+
 	
 			
 func show_question_dialog(question: String):
 	question_label.text = question
 
-func show_answer_dialog(answer: Array[String]):
-	print_debug(answer)
+func show_answer_dialog(answer: Array[Variant]):
 	answer_label_1.text = "    " + answer[0]
 	answer_label_2.text = "    " + answer[1]
 	answer_label_3.text = "    " + answer[2]
 
-func handle_choises():
+func _enter_input():
+	if Input.is_action_just_pressed("GB_B"):
+		update_gui = true
+		
+		match current_progress:
+			progress.NEUTRAL: current_progress = selected_input + 1
+			progress.FIREFLIES: # option 1: goto start; option 2: close
+				end_of_dialog_tree()
+			progress.WHO: # option 1: goto start; option 2: close
+				end_of_dialog_tree()
+			progress.LETS:
+				if talked[selected_npc]: # Already talked to this npc
+					end_of_dialog_tree()
+				else:
+					if selected_input == dialog[selected_npc]["correct_answers"][current_question]:
+						npc_points[selected_npc] += 1
+					elif !(selected_npc == 2 and current_question == 1) and selected_input == dialog[selected_npc]["incorrect_answers"][current_question] and current_question != 2:
+						npc_points[selected_npc] -= 1
+
+					current_question += 1
+					if current_question > 2:
+						talked[selected_npc] = true
+						
+			progress.PROPOSE:
+				if npc_points[selected_npc] < 0:
+					end_of_dialog_tree()
+				elif selected_input == 0:
+					pass # TODO end game
+
+		selected_input = 0
+		_update_highlighted_choise()
+
+func end_of_dialog_tree():
+	match selected_input:
+		0: current_progress = progress.NEUTRAL
+		1: close_dialog()
+
+func close_dialog():
+	Global.selected_npc = selected_npc
+	Global.gave_fireflies = gave_fireflies
+	Global.talked = talked
+	Global.npc_points = npc_points
+	
+	Global.goback_scene()
+
+
+func _up_down_input():
 	if Input.is_action_just_pressed("GB_up"):
 		update_gui = true
 		
 		selected_input -= 1
 		if selected_input < 0:
 			selected_input = 2
-		
-		match selected_input:
-			0:
-				answer_choise_1.texture = ANSWER_HIGHLIGHTED
-				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
-			1:
-				answer_choise_2.texture = ANSWER_HIGHLIGHTED
-				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
-			2:
-				answer_choise_3.texture = ANSWER_HIGHLIGHTED
-				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
-			_: selected_input = 0
+
+		_update_highlighted_choise()
 
 	if Input.is_action_just_pressed("GB_down"):
 		update_gui = true
@@ -108,14 +215,20 @@ func handle_choises():
 		if selected_input > 2:
 			selected_input = 0
 
-		match selected_input:
-			0:
-				answer_choise_1.texture = ANSWER_HIGHLIGHTED
-				answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
-			1:
-				answer_choise_2.texture = ANSWER_HIGHLIGHTED
-				answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
-			2:
-				answer_choise_3.texture = ANSWER_HIGHLIGHTED
-				answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
-			_: selected_input = 0
+		_update_highlighted_choise()
+
+func _update_highlighted_choise():
+	match selected_input:
+		0:
+			answer_choise_1.texture = ANSWER_HIGHLIGHTED
+			answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+		1:
+			answer_choise_2.texture = ANSWER_HIGHLIGHTED
+			answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_3.texture = ANSWER_NOT_HIGHLIGHTED
+		2:
+			answer_choise_3.texture = ANSWER_HIGHLIGHTED
+			answer_choise_2.texture = ANSWER_NOT_HIGHLIGHTED
+			answer_choise_1.texture = ANSWER_NOT_HIGHLIGHTED
+		_: selected_input = 0
