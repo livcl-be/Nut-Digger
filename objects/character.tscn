@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bld4o1q8fx5f5" path="res://scripts/movement.gd" id="1_cxq7b"]
 [ext_resource type="Texture2D" uid="uid://pruk5dfmxaeo" path="res://assets/player/Squirrel_anim-Sheet.png" id="2_bnbr5"]
+[ext_resource type="FontFile" uid="uid://bf30wbxxprmdl" path="res://assets/aseprite-mini.otf" id="3_pjthe"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i0ujt"]
 size = Vector2(20, 18)
@@ -230,10 +231,10 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="CharacterBody2D" type="CharacterBody2D" unique_id=363534456]
+[node name="Player" type="CharacterBody2D" unique_id=363534456]
 script = ExtResource("1_cxq7b")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1402347605]
+[node name="Collision" type="CollisionShape2D" parent="." unique_id=1402347605]
 position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_i0ujt")
 
@@ -245,6 +246,26 @@ frame_progress = 0.09827227
 [node name="CameraRig" type="Node2D" parent="." unique_id=320918911]
 
 [node name="PlayerCamera" type="Camera2D" parent="CameraRig" unique_id=1262718913]
+
+[node name="MissionControl" type="Control" parent="CameraRig/PlayerCamera" unique_id=678302234]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MissionLabel" type="Label" parent="CameraRig/PlayerCamera/MissionControl" unique_id=155291714]
+layout_mode = 0
+offset_left = -79.0
+offset_top = 31.0
+offset_right = -21.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("3_pjthe")
+theme_override_font_sizes/font_size = 5
+text = "Missions
+Mary Rich <
+Gamble Ring <"
+vertical_alignment = 2
 
 [connection signal="animation_finished" from="Sprite" to="." method="_on_sprite_animation_finished"]
 [connection signal="sprite_frames_changed" from="Sprite" to="." method="_on_sprite_sprite_frames_changed"]

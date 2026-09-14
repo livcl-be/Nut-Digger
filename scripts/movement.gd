@@ -5,11 +5,14 @@ class_name Movement
 ##############
 
 @onready var camera_rig: Node2D = $CameraRig
+@onready var camera: Camera2D = $CameraRig/PlayerCamera
 
 const CAMERA_HORIZONTAL_OFFSET: float = 10
 const CAMERA_VERTICAL_OFFSET: float = 5
 const CAMERA_HORIZONTAL_CLIP: float = 20
 const CAMERA_VERTICAL_CLIP: float = 10
+
+@export var CAMERA_MOVED_UPWARDS: float = 0
 
 ### ANIMATION ###
 #################
@@ -44,11 +47,21 @@ const GRAVITY: int = 1100
 
 const START_JUMPING_TIME: float = 0.5
 
+### MISSION LABEL ###
+#####################
+@onready var mission_label: Label = $CameraRig/PlayerCamera/MissionControl/MissionLabel
+const missions: Array[Variant] = [["Gamble"], ["Find Fireflies for Lamp", "Find Ring"], ["Marry", "Gamble Ring"]]
+var current_mission: int = 0
+
+### POPUP'S ###
+###############
+var popup_object: Node = null
+
 ### PRE INIT VARS ###
 #####################
 var random = RandomNumberGenerator.new()
 
-var is_facing_left: bool = false
+@export var is_facing_left: bool = false
 var walk_to_the_left: bool = false
 var is_jumping: bool = false
 var is_start_jumping: bool = false
@@ -56,32 +69,51 @@ var is_falling: bool = false
 var is_dashing: bool = false
 
 var input_axis: Vector2 = Vector2.ZERO
-var speed_scale = 0.0
+var speed_scale: float = 0.0
 
 var dashed_during_jump: bool = false
 var dash_cooldown: bool = false
 var previous_dash_velocity: Vector2 = Vector2.ZERO
 
-var min_speed = MIN_SPEED
-var max_speed = MAX_SPEED
-var acceleration = WALK_ACCELERATION
-var deacceleration = WALK_FRICTION
+var min_speed: float = MIN_SPEED
+var max_speed: float = MAX_SPEED
+var acceleration: float = WALK_ACCELERATION
+var deacceleration: float = WALK_FRICTION
 
 func _ready() -> void:
 	sprite.animation_looped.connect(_on_sprite_animation_finished)
 	random.seed = 12345
 
+	# Apply offset for home's
+	camera_rig.position.y = -CAMERA_MOVED_UPWARDS
+	
+	_update_mission_label()
+
 func _process(_delta):
-	process_input()
-	process_animation()
-	process_camera_rig()
+	if !popup_object:
+		process_input()
+		process_animation()
+		process_camera_rig(_delta)
+	else:
+		sprite.stop()
 	
 func _physics_process(delta):
-	process_jump(delta)
-	process_walk(delta)
-	process_dash(delta)
+	if !popup_object:
+		process_jump(delta)
+		process_walk(delta)
+		process_dash(delta)
+	
+		move_and_slide()
 
-	move_and_slide()
+func _update_mission_label() -> void:
+	var text_builder: String = "Missions"
+	for mission in missions[current_mission]:
+		text_builder = text_builder + "\n> " + mission
+	mission_label.text = text_builder
+	
+func next_mission() -> void:
+	current_mission += 1
+	_update_mission_label()
 
 func _on_sprite_animation_finished() -> void:
 	var animation_name: StringName = sprite.animation
@@ -108,12 +140,12 @@ func _on_sprite_animation_finished() -> void:
 		sprite.play("idle")
 
 func process_input():
-	input_axis.x = Input.get_axis("move_left", "move_right")
-	input_axis.y = - Input.get_action_strength("move_jump")
+	input_axis.x = Input.get_axis("GB_left", "GB_right")
+	input_axis.y = - Input.get_action_strength("GB_up")
 
 func process_jump(delta: float):
 	if is_on_floor():
-		var jump_pressed: bool = Input.is_action_pressed("move_jump")
+		var jump_pressed: bool = Input.is_action_pressed("GB_up")
 		
 		if not jump_pressed and is_start_jumping:
 			is_start_jumping = false
@@ -127,7 +159,7 @@ func process_jump(delta: float):
 	else:
 		var gravity: int = GRAVITY
 
-		if Input.is_action_pressed("move_jump") and not is_falling:
+		if Input.is_action_pressed("GB_up") and not is_falling:
 			gravity = LONG_JUMP_GRAVITY
 		else:
 			is_start_jumping = false
@@ -182,7 +214,7 @@ func process_walk(delta: float):
 	speed_scale = abs(velocity.x) / MAX_SPEED
 
 func process_dash(delta: float):
-	if Input.is_action_just_pressed("move_dash") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
+	if Input.is_action_just_pressed("GB_A") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
 		previous_dash_velocity = velocity
 		velocity.x = -DASH_VELOCITY if is_facing_left else DASH_VELOCITY
 		is_dashing = true
@@ -199,7 +231,7 @@ func process_animation():
 	sprite.flip_h = !is_facing_left
 	
 	if velocity and animation_name != "jump to flying":
-		sprite.speed_scale = max(1.4, speed_scale * 5.0)
+		sprite.speed_scale = max(0.8, speed_scale * 5.0)
 
 	if is_start_jumping:
 		sprite.speed_scale = SPRITE_START_JUMPING_SPEED
@@ -216,15 +248,33 @@ func process_animation():
 		sprite.speed_scale = SPRITE_IDLE_SPEED
 		sprite.play("idle")
 
-func process_camera_rig():
-	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * 0.1
-	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * 0.1
+func process_camera_rig(delta: float):
+	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * delta * 7
+	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * delta * 7
 	
 	# Clipping
 	if CAMERA_HORIZONTAL_CLIP < abs(camera_rig.position.x):
 		var dir = camera_rig.position.x / abs(camera_rig.position.x)
 		camera_rig.position.x = dir * CAMERA_HORIZONTAL_CLIP
 
-	if CAMERA_VERTICAL_CLIP < abs(camera_rig.position.y):
+	if CAMERA_VERTICAL_CLIP < abs(camera_rig.position.y + CAMERA_MOVED_UPWARDS):
 		var dir = camera_rig.position.y / abs(camera_rig.position.y)
-		camera_rig.position.y = dir * CAMERA_VERTICAL_CLIP
+		camera_rig.position.y = dir * CAMERA_VERTICAL_CLIP - CAMERA_MOVED_UPWARDS
+
+func make_camera_active():
+	camera.make_current()
+
+func show_popup(message: String, popup: PackedScene):
+	popup_object = popup.instantiate()
+	
+	if popup_object.has_node("Text"):
+		popup_object.get_node("Text").text = message
+	
+	$CameraRig.add_child(popup_object)
+
+func hide_popup():
+	if popup_object:
+		popup_object.free()
+		print_debug(popup_object)
+	
+	popup_object = null
