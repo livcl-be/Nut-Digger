@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://c84u6ydff4l5v" path="res://assets/env/signs/dark forest.png" id="6_rokc8"]
 [ext_resource type="Texture2D" uid="uid://dq4xr2i830jer" path="res://assets/env/signs/right arrow.png" id="7_nu4vb"]
 [ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="9_73hij"]
+[ext_resource type="PackedScene" uid="uid://b56txhyqa28un" path="res://objects/receive_ring_popup.tscn" id="10_nu4vb"]
 
 [sub_resource type="DrawableTexture2D" id="DrawableTexture2D_pu8e5"]
 
@@ -231,7 +232,7 @@ tile_set = SubResource("TileSet_7etbf")
 collision_enabled = false
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_xqa88")]
-position = Vector2(-292, 5)
+position = Vector2(314, -899)
 
 [node name="ExitDarkForest" parent="." unique_id=2063205134 instance=ExtResource("9_73hij")]
 position = Vector2(-317, 13)
@@ -247,3 +248,11 @@ position = Vector2(2313, 321)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDarkForest/StaticBody2D" unique_id=560021463]
 position = Vector2(-2332, -375)
 shape = SubResource("RectangleShape2D_rokc8")
+
+[node name="RingActionArea" parent="." unique_id=8871458 instance=ExtResource("9_73hij")]
+position = Vector2(626, -883)
+on_key_press = false
+receive_ring_upon_trigger = true
+enable_popup = true
+message = "Your received the ring."
+popup = ExtResource("10_nu4vb")

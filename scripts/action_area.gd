@@ -5,6 +5,11 @@ extends Area2D
 @export_group("Conditional")
 @export var on_key_press: bool = true
 
+### HARDCODED RING LOGIC ###
+############################
+@export_group("Receive ring")
+@export var receive_ring_upon_trigger: bool = false
+
 ### HARDCODED DARK FOREST LOGIC ###
 ###################################
 @export_group("Dark Forest")
@@ -82,6 +87,10 @@ func _execute_logic() -> void:
 	if popup_conditional and !popup_currently_active:
 		popup_currently_active = true
 		player.show_popup(message, popup)
+		
+		if receive_ring_upon_trigger:
+			Global.collected_ring()
+		
 	elif popup_conditional and popup_currently_active:
 		popup_currently_active = false
 		player.hide_popup()
