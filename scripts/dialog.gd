@@ -130,7 +130,6 @@ func _update_dialog() -> void:
 				if Global.gave_fireflies[selected_npc]:
 					show_question_dialog(dialog[selected_npc]["fireflies"][1])
 				else:
-					Global.gave_fireflies[selected_npc] = true
 					show_question_dialog(dialog[selected_npc]["fireflies"][0])
 					Global.append_fireflies()
 				
@@ -172,6 +171,7 @@ func _update_dialog() -> void:
 					show_answer_dialog(["I want to bet.", "Money tips?", "Close dialog"])
 					
 			shop_progress.BET:
+				Global.current_mission = Global.mission.FIREFLIES
 				show_question_dialog(dialog[selected_npc]["introduction"])
 				show_answer_dialog(["Go to start", "Close dialog", ""])
 				
@@ -206,6 +206,7 @@ func _enter_input():
 			match current_progress:
 				progress.NEUTRAL: current_progress = (selected_input + 1 + (1 if Global.has_collected_ring() else 0)) as progress
 				progress.FIREFLIES: # option 1: goto start; option 2: close
+					Global.gave_fireflies[selected_npc] = true
 					end_of_dialog_tree()
 				progress.WHO: # option 1: goto start; option 2: close
 					end_of_dialog_tree()
@@ -229,7 +230,7 @@ func _enter_input():
 					elif npc_points[selected_npc] < 0:
 						end_of_dialog_tree()
 					elif selected_input == 0:
-						pass # TODO end game
+						pass # TODO end game: marry npc
 		else:
 			match current_shop_progress:
 				shop_progress.NEUTRAL:
@@ -242,8 +243,8 @@ func _enter_input():
 				shop_progress.TIP: end_of_dialog_tree()
 				shop_progress.RING:
 					match selected_input:
-						0: pass # TODO Bet ring
-						1: pass # TODO Sell ring
+						0: pass # TODO end game: Bet ring
+						1: pass # TODO end game: Sell ring
 
 		selected_input = 0
 		_update_highlighted_choise()

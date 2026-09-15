@@ -14,14 +14,23 @@ var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
+# Mission logic
+const missions: Array[Variant] = [["Gamble"], ["Find Fireflies for Lamp"], ["Find Ring"], ["Marry", "Gamble Ring"]]
+enum mission {GAMBLE, FIREFLIES, RING, MARRY_OR_GAMBLE}
+var current_mission: mission = mission.GAMBLE
+
 func append_fireflies() -> void:
 	collected_fireflies += 1
+	
+	if has_collected_all_fireflies():
+		current_mission = mission.RING
 
 func has_collected_all_fireflies() -> bool:
 	return collected_fireflies > 2
 
 func collected_ring() -> void:
 	has_ring = true
+	current_mission = mission.MARRY_OR_GAMBLE
 
 func has_collected_ring() -> bool:
 	return has_ring

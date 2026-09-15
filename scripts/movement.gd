@@ -42,7 +42,7 @@ const DASH_VELOCITY: float = 400
 
 # Moving vertical
 const JUMP_SPEED: int = -200
-const LONG_JUMP_GRAVITY: int = 320
+const LONG_JUMP_GRAVITY: int = 340
 const GRAVITY: int = 1100
 
 const COYOTE_TIME_DURATION: float = 0.07
@@ -52,8 +52,6 @@ const START_JUMPING_TIME: float = 0.5
 ### MISSION LABEL ###
 #####################
 @onready var mission_label: Label = $CameraRig/PlayerCamera/MissionControl/MissionLabel
-const missions: Array[Variant] = [["Gamble"], ["Find Fireflies for Lamp", "Find Ring"], ["Marry", "Gamble Ring"]]
-var current_mission: int = 0
 
 ### POPUP'S ###
 ###############
@@ -91,14 +89,14 @@ func _ready() -> void:
 
 	# Apply offset for home's
 	camera_rig.position.y = -CAMERA_MOVED_UPWARDS
-	
-	_update_mission_label()
 
 func _process(_delta):
 	if !popup_object:
 		process_input()
 		process_animation()
 		process_camera_rig(_delta)
+
+		_update_mission_label()
 	else:
 		sprite.stop()
 	
@@ -112,13 +110,9 @@ func _physics_process(delta):
 
 func _update_mission_label() -> void:
 	var text_builder: String = "Missions"
-	for mission in missions[current_mission]:
+	for mission in Global.missions[Global.current_mission]:
 		text_builder = text_builder + "\n> " + mission
 	mission_label.text = text_builder
-	
-func next_mission() -> void:
-	current_mission += 1
-	_update_mission_label()
 
 func _on_sprite_animation_finished() -> void:
 	var animation_name: StringName = sprite.animation
@@ -257,7 +251,7 @@ func process_animation():
 	var animation_name: StringName = sprite.animation
 	sprite.flip_h = !is_facing_left
 	
-	if velocity and animation_name != "jump to flying":
+	if (velocity or input_axis.x) and animation_name != "jump to flying":
 		sprite.speed_scale = max(0.8, speed_scale * 5.0)
 
 	if is_start_jumping:

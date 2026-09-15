@@ -233,7 +233,7 @@ shape = SubResource("RectangleShape2D_i0ujt")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=2093633842]
 sprite_frames = SubResource("SpriteFrames_bnbr5")
-animation = &"start jump"
+animation = &"jump"
 
 [node name="CameraRig" type="Node2D" parent="." unique_id=320918911]
 
