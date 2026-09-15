@@ -16,7 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://df3cpe416hivx" path="res://assets/env/Retirement/hole.png" id="10_6yu02"]
 [ext_resource type="Texture2D" uid="uid://bl353orb3avkl" path="res://assets/env/Retirement/arrow.png" id="11_3ag1x"]
 [ext_resource type="Texture2D" uid="uid://dfcxfsuveutls" path="res://assets/env/Retirement/note.png" id="12_w4n7r"]
-[ext_resource type="PackedScene" uid="uid://ct36ujvnwuqcg" path="res://scenes/home.tscn" id="13_6yu02"]
+[ext_resource type="PackedScene" uid="uid://ct36ujvnwuqcg" path="res://scenes/home_august.tscn" id="13_6yu02"]
+[ext_resource type="PackedScene" uid="uid://dqtvo38rfvqho" path="res://scenes/home_billie.tscn" id="14_d0fdg"]
+[ext_resource type="PackedScene" uid="uid://bjnqhwwo1j0e0" path="res://scenes/home_francis.tscn" id="15_ifx1g"]
 
 [sub_resource type="DrawableTexture2D" id="DrawableTexture2D_2bagr"]
 
@@ -261,7 +263,9 @@ texture = ExtResource("10_6yu02")
 
 [node name="ActionArea" parent="Environment/Retirement home/Billie" unique_id=1113454864 instance=ExtResource("7_0fmyi")]
 position = Vector2(11, 8.5)
+go_to_scene = true
 npc_index = 1
+scene = ExtResource("14_d0fdg")
 
 [node name="Francis" type="Sprite2D" parent="Environment/Retirement home" unique_id=1144795016]
 position = Vector2(1407, 51)
@@ -271,7 +275,9 @@ texture = ExtResource("10_6yu02")
 
 [node name="ActionArea" parent="Environment/Retirement home/Francis" unique_id=1983614221 instance=ExtResource("7_0fmyi")]
 position = Vector2(8.999999, 9.000001)
+go_to_scene = true
 npc_index = 2
+scene = ExtResource("15_ifx1g")
 
 [node name="August" type="Sprite2D" parent="Environment/Retirement home" unique_id=348375746]
 position = Vector2(1406, -94)

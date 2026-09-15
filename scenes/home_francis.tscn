@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://bjnqhwwo1j0e0"]
+
+[ext_resource type="Texture2D" uid="uid://dpfujib41gooa" path="res://assets/env/FrancisHouse.png" id="1_w6ao6"]
+[ext_resource type="Texture2D" uid="uid://df3cpe416hivx" path="res://assets/env/Retirement/hole.png" id="2_kshf4"]
+[ext_resource type="PackedScene" uid="uid://c8auxxr2pgt5q" path="res://objects/character.tscn" id="3_0lhll"]
+[ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="4_5t5ka"]
+[ext_resource type="PackedScene" uid="uid://mpvc5qsimcw5" path="res://scenes/dialog.tscn" id="5_pvfhx"]
+[ext_resource type="PackedScene" uid="uid://1ygxv0iubk0p" path="res://objects/popup.tscn" id="6_yre04"]
+
+[sub_resource type="DrawableTexture2D" id="DrawableTexture2D_kh352"]
+
+[node name="Home" type="Node2D" unique_id=1633483265]
+position = Vector2(1000, 1000)
+
+[node name="scene" type="Node2D" parent="." unique_id=402617013]
+
+[node name="Background" type="Sprite2D" parent="scene" unique_id=1616578642]
+modulate = Color(0.13333334, 0.37254903, 0.4627451, 1)
+position = Vector2(75, 67)
+scale = Vector2(23.84375, 18.640623)
+texture = SubResource("DrawableTexture2D_kh352")
+
+[node name="House" type="Sprite2D" parent="scene" unique_id=1054907030]
+position = Vector2(120, 80)
+texture = ExtResource("1_w6ao6")
+
+[node name="Hole" type="Sprite2D" parent="scene" unique_id=1028089981]
+position = Vector2(240, 132)
+texture = ExtResource("2_kshf4")
+
+[node name="Boundry" type="StaticBody2D" parent="." unique_id=404976048]
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Boundry" unique_id=1371832873]
+position = Vector2(-50.5, 65.5)
+scale = Vector2(6.05, 7.55)
+polygon = PackedVector2Array(47.024796, -1.3907318, 48.01653, 11.589404, 8.347107, 11.721854, 9.173553, 1.6556244, 11.48761, -5.496689, 16.611572, -7.748337, 39.421494, -7.748337, 47.024796, -1.3907318, 50.1653, -9.602646, 5.702479, -15.695364, -0.909091, 20.198677, 62.727272, 20.596027, 50.991734, -9.735099)
+
+[node name="Actions" type="Node" parent="." unique_id=125414528]
+
+[node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_0lhll")]
+position = Vector2(207, 131)
+CAMERA_MOVED_UPWARDS = 15.0
+is_facing_left = true
+
+[node name="ActionAreas" type="Node2D" parent="." unique_id=1668645663]
+
+[node name="SquirelAction" parent="ActionAreas" unique_id=2063205134 instance=ExtResource("4_5t5ka")]
+position = Vector2(61, 136)
+go_to_scene = true
+npc_index = 2
+scene = ExtResource("5_pvfhx")
+
+[node name="PicturePopup" parent="ActionAreas" unique_id=159376250 instance=ExtResource("4_5t5ka")]
+position = Vector2(177, 127)
+enable_popup = true
+message = "A family picture in front of a large lake."
+popup = ExtResource("6_yre04")
+
+[node name="ExitAction" parent="ActionAreas" unique_id=980368607 instance=ExtResource("4_5t5ka")]
+position = Vector2(242, 139)
+go_back_a_scene = true
+
+[node name="HickingGearPopup" parent="ActionAreas" unique_id=1435252132 instance=ExtResource("4_5t5ka")]
+position = Vector2(215, 131)
+enable_popup = true
+message = "Hiking gear, it looks expensive."
+popup = ExtResource("6_yre04")

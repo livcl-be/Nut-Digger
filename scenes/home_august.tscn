@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ct36ujvnwuqcg"]
 
-[ext_resource type="Texture2D" uid="uid://coshyc5bfl4ae" path="res://assets/env/Houses/AugustHouse.png" id="1_reixx"]
+[ext_resource type="Texture2D" uid="uid://coshyc5bfl4ae" path="res://assets/env/Houses/AugustHouse.png" id="1_kblr5"]
 [ext_resource type="PackedScene" uid="uid://c8auxxr2pgt5q" path="res://objects/character.tscn" id="2_uhids"]
 [ext_resource type="Texture2D" uid="uid://df3cpe416hivx" path="res://assets/env/Retirement/hole.png" id="2_yxilm"]
 [ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="3_yxilm"]
@@ -20,9 +20,9 @@ position = Vector2(75, 67)
 scale = Vector2(23.84375, 18.640623)
 texture = SubResource("DrawableTexture2D_kh352")
 
-[node name="AugustHouse" type="Sprite2D" parent="scene" unique_id=1054907030]
+[node name="House" type="Sprite2D" parent="scene" unique_id=1054907030]
 position = Vector2(120, 80)
-texture = ExtResource("1_reixx")
+texture = ExtResource("1_kblr5")
 
 [node name="Hole" type="Sprite2D" parent="scene" unique_id=1028089981]
 position = Vector2(240, 132)
@@ -33,7 +33,7 @@ texture = ExtResource("2_yxilm")
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Boundry" unique_id=1371832873]
 position = Vector2(-50.5, 65.5)
 scale = Vector2(6.05, 7.55)
-polygon = PackedVector2Array(48.01653, -8.675496, 48.01653, 11.589404, 8.347107, 11.721854, 8.347107, -8.675496, 48.01653, -8.675496, 49.008263, -9.337748, 5.702479, -15.695364, -0.909091, 20.198677, 62.727272, 20.596027, 50.991734, -9.735099)
+polygon = PackedVector2Array(47.024796, -1.3907318, 48.01653, 11.589404, 8.347107, 11.721854, 9.173553, 1.6556244, 11.48761, -5.496689, 16.611572, -7.748337, 39.421494, -7.748337, 47.024796, -1.3907318, 50.1653, -9.602646, 5.702479, -15.695364, -0.909091, 20.198677, 62.727272, 20.596027, 50.991734, -9.735099)
 
 [node name="Actions" type="Node" parent="." unique_id=125414528]
 

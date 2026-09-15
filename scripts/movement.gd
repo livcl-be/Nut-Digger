@@ -265,12 +265,13 @@ func make_camera_active():
 	camera.make_current()
 
 func show_popup(message: String, popup: PackedScene):
-	popup_object = popup.instantiate()
-	
-	if popup_object.has_node("Text"):
-		popup_object.get_node("Text").text = message
-	
-	$CameraRig.add_child(popup_object)
+	if !popup_object: # Avoid double popup's
+		popup_object = popup.instantiate()
+		
+		if popup_object.has_node("Text"):
+			popup_object.get_node("Text").text = message
+		
+		$CameraRig.add_child(popup_object)
 
 func hide_popup():
 	if popup_object:
