@@ -348,4 +348,4 @@ tile_set = SubResource("TileSet_egdet")
 collision_enabled = false
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_1vp0e")]
-position = Vector2(1541, 101)
+position = Vector2(-815, -259)

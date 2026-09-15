@@ -232,7 +232,7 @@ tile_set = SubResource("TileSet_7etbf")
 collision_enabled = false
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_xqa88")]
-position = Vector2(314, -899)
+position = Vector2(-290, 5)
 
 [node name="ExitDarkForest" parent="." unique_id=2063205134 instance=ExtResource("9_73hij")]
 position = Vector2(-317, 13)

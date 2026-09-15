@@ -18,8 +18,7 @@ func append_fireflies() -> void:
 	collected_fireflies += 1
 
 func has_collected_all_fireflies() -> bool:
-	#return collected_fireflies > 2
-	return true
+	return collected_fireflies > 2
 
 func collected_ring() -> void:
 	has_ring = true
