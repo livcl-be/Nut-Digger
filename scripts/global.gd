@@ -2,6 +2,7 @@ extends Node
 
 var loaded_scene: Array[Node] = []
 var loaded_scene_index: int = -1
+var disable_scene_switching: bool = false
 
 var has_ring: bool = false
 var collected_fireflies: int = 0
@@ -17,7 +18,8 @@ func append_fireflies() -> void:
 	collected_fireflies += 1
 
 func has_collected_all_fireflies() -> bool:
-	return collected_fireflies > 2
+	#return collected_fireflies > 2
+	return true
 
 func collected_ring() -> void:
 	has_ring = true
@@ -33,7 +35,8 @@ func _ready():
 	loaded_scene_index += 1
 
 func goto_scene(scene: PackedScene):
-	_deferred_goto_scene.call_deferred(scene)
+	if !disable_scene_switching:
+		_deferred_goto_scene.call_deferred(scene)
 
 func _deferred_goto_scene(scene: PackedScene):
 	loaded_scene[loaded_scene_index].process_mode = ProcessMode.PROCESS_MODE_DISABLED
@@ -57,3 +60,29 @@ func goback_scene():
 func _activate_player_camera(scene: Node):
 	if scene.has_node("Player"):
 		scene.get_node("Player").make_camera_active()
+
+func move_player_of_previous_scene(translation: Vector2):
+	var scene: Node = loaded_scene[loaded_scene_index - 1]
+	if scene.has_node("Player"):
+		var player: CharacterBody2D = scene.get_node("Player")
+		player.translate(translation)
+		player.velocity = Vector2.ZERO
+
+func give_player_of_previous_scene_velocity(velocity: Vector2):
+	_give_player_velocity(velocity, loaded_scene_index - 1)
+
+func transfer_velocity_from_previous_scene_to_current_scene():
+	_give_player_velocity(_get_velocity(loaded_scene_index - 1), loaded_scene_index)
+
+func _give_player_velocity(velocity: Vector2, scene_index: int):
+	var scene: Node = loaded_scene[scene_index]
+	if scene.has_node("Player"):
+		var player: CharacterBody2D = scene.get_node("Player")
+		player.velocity = velocity
+
+func _get_velocity(scene_index: int) -> Vector2:
+	var scene: Node = loaded_scene[scene_index]
+	if scene.has_node("Player"):
+		var player: CharacterBody2D = scene.get_node("Player")
+		return player.velocity
+	return Vector2.ZERO

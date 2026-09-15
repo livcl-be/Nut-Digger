@@ -30,7 +30,6 @@ var current_shop_progress: shop_progress = shop_progress.NEUTRAL
 enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
 var current_progress: progress = progress.NEUTRAL
 var current_question: int = 0
-var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
@@ -104,7 +103,6 @@ func _ready() -> void:
 	$Camera.make_current()
 	
 	selected_npc = Global.selected_npc
-	gave_fireflies = Global.gave_fireflies
 	talked = Global.talked
 	npc_points = Global.npc_points
 	
@@ -129,11 +127,11 @@ func _update_dialog() -> void:
 					show_answer_dialog(dialog_options)
 				
 			progress.FIREFLIES:
-				if gave_fireflies[selected_npc]:
+				if Global.gave_fireflies[selected_npc]:
 					show_question_dialog(dialog[selected_npc]["fireflies"][1])
 				else:
-					gave_fireflies[selected_npc] = true
-					show_question_dialog(dialog[selected_npc]["fireflies"][1])
+					Global.gave_fireflies[selected_npc] = true
+					show_question_dialog(dialog[selected_npc]["fireflies"][0])
 					Global.append_fireflies()
 				
 				show_answer_dialog(["Go to start", "Close dialog", ""])
@@ -253,7 +251,6 @@ func end_of_dialog_tree():
 
 func close_dialog():
 	Global.selected_npc = selected_npc
-	Global.gave_fireflies = gave_fireflies
 	Global.talked = talked
 	Global.npc_points = npc_points
 	
