@@ -178,7 +178,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_rokc8")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rokc8"]
-size = Vector2(26, 129.6875)
+size = Vector2(26, 715.84375)
 
 [node name="DarkForest" type="Node2D" unique_id=795316466]
 position = Vector2(0, -1000)
@@ -246,7 +246,7 @@ player_translation = Vector2(-60, 0)
 position = Vector2(2313, 321)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitDarkForest/StaticBody2D" unique_id=560021463]
-position = Vector2(-2332, -375)
+position = Vector2(-2332, -668.0781)
 shape = SubResource("RectangleShape2D_rokc8")
 
 [node name="RingActionArea" parent="." unique_id=8871458 instance=ExtResource("9_73hij")]
