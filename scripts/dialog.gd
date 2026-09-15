@@ -30,7 +30,6 @@ var current_shop_progress: shop_progress = shop_progress.NEUTRAL
 enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
 var current_progress: progress = progress.NEUTRAL
 var current_question: int = 0
-var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
@@ -95,6 +94,10 @@ const dialog: Array[Variant] = [
 ]
 
 func _ready() -> void:
+	selected_npc = Global.selected_npc
+	talked = Global.talked
+	npc_points = Global.npc_points
+	
 	match selected_npc:
 		0: npc_image.texture = NPC_AUGUST_IMAGE
 		1: npc_image.texture = NPC_BILLIE_IMAGE
@@ -102,11 +105,6 @@ func _ready() -> void:
 		3: npc_image.texture = NPC_SHOPKEEPER_IMAGE
 
 	$Camera.make_current()
-	
-	selected_npc = Global.selected_npc
-	gave_fireflies = Global.gave_fireflies
-	talked = Global.talked
-	npc_points = Global.npc_points
 	
 func _process(delta: float) -> void:
 	_up_down_input()
@@ -129,11 +127,11 @@ func _update_dialog() -> void:
 					show_answer_dialog(dialog_options)
 				
 			progress.FIREFLIES:
-				if gave_fireflies[selected_npc]:
+				if Global.gave_fireflies[selected_npc]:
 					show_question_dialog(dialog[selected_npc]["fireflies"][1])
 				else:
-					gave_fireflies[selected_npc] = true
-					show_question_dialog(dialog[selected_npc]["fireflies"][1])
+					Global.gave_fireflies[selected_npc] = true
+					show_question_dialog(dialog[selected_npc]["fireflies"][0])
 					Global.append_fireflies()
 				
 				show_answer_dialog(["Go to start", "Close dialog", ""])
@@ -151,7 +149,10 @@ func _update_dialog() -> void:
 					show_answer_dialog(dialog[selected_npc]["answers"][current_question])
 			
 			progress.PROPOSE:
-				if npc_points[selected_npc] < 0:
+				if !talked[selected_npc]: # Did not talk to this npc
+					show_question_dialog("Let's first talk a bit.")
+					show_answer_dialog(["Okay", "", ""])
+				elif npc_points[selected_npc] < 0:
 					show_question_dialog(dialog[selected_npc]["proposal"][0])
 					show_answer_dialog(["Go to start", "Close dialog", ""])
 				elif npc_points[selected_npc] == 0:
@@ -214,7 +215,7 @@ func _enter_input():
 					else:
 						if selected_input == dialog[selected_npc]["correct_answers"][current_question]:
 							npc_points[selected_npc] += 1
-						elif !(selected_npc == 2 and current_question == 1) and selected_input == dialog[selected_npc]["incorrect_answers"][current_question] and current_question != 2:
+						elif !(selected_npc == 2 and current_question == 1) and current_question != 2 and selected_input == dialog[selected_npc]["incorrect_answers"][current_question]:
 							npc_points[selected_npc] -= 1
 	
 						current_question += 1
@@ -222,7 +223,10 @@ func _enter_input():
 							talked[selected_npc] = true
 							
 				progress.PROPOSE:
-					if npc_points[selected_npc] < 0:
+					if !talked[selected_npc]:
+						if selected_input == 0:
+							current_progress = progress.LETS
+					elif npc_points[selected_npc] < 0:
 						end_of_dialog_tree()
 					elif selected_input == 0:
 						pass # TODO end game
@@ -253,7 +257,6 @@ func end_of_dialog_tree():
 
 func close_dialog():
 	Global.selected_npc = selected_npc
-	Global.gave_fireflies = gave_fireflies
 	Global.talked = talked
 	Global.npc_points = npc_points
 	
