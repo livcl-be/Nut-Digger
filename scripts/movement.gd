@@ -41,8 +41,8 @@ const DASH_TIMEOUT: float = 0.5
 const DASH_VELOCITY: float = 400
 
 # Moving vertical
-const JUMP_SPEED: int = -240
-const LONG_JUMP_GRAVITY: int = 450
+const JUMP_SPEED: int = -200
+const LONG_JUMP_GRAVITY: int = 320
 const GRAVITY: int = 1100
 
 const COYOTE_TIME_DURATION: float = 0.07
@@ -235,6 +235,9 @@ func process_walk(delta: float):
 	speed_scale = abs(velocity.x) / MAX_SPEED
 
 func process_dash(delta: float):
+	if is_on_floor() and dashed_during_jump:
+		dashed_during_jump = false
+		
 	if Input.is_action_just_pressed("GB_A") and !is_dashing and !dash_cooldown and (is_on_floor() or !dashed_during_jump):
 		previous_dash_velocity = velocity
 		velocity.x = -DASH_VELOCITY if is_facing_left else DASH_VELOCITY
@@ -247,6 +250,9 @@ func dash_done():
 	dash_cooldown = true
 	get_tree().create_timer(DASH_TIMEOUT).timeout.connect(func(): dash_cooldown = false)
 
+	if !is_on_floor():
+		dashed_during_jump = true
+
 func process_animation():
 	var animation_name: StringName = sprite.animation
 	sprite.flip_h = !is_facing_left
@@ -257,7 +263,7 @@ func process_animation():
 	if is_start_jumping:
 		sprite.speed_scale = SPRITE_START_JUMPING_SPEED
 		sprite.play("start jump")
-	elif is_dashing:
+	elif is_dashing or dashed_during_jump:
 		sprite.play("flying")
 	elif is_falling and animation_name != "jump" and animation_name != "jump to flying":
 		sprite.play("flying")
