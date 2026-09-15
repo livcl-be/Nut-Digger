@@ -1,7 +1,7 @@
 extends Node
 
-var main_scene: Node = null
-var loaded_scene: Node = null
+var loaded_scene: Array[Node] = []
+var loaded_scene_index: int = -1
 
 var has_ring: bool = false
 var collected_fireflies: int = 0
@@ -28,35 +28,32 @@ func has_collected_ring() -> bool:
 func _ready():
 	var root: Window = get_tree().root
 	# Using a negative index counts from the end, so this gets the last child node of `root`.
-	main_scene = root.get_child(-1)
+	var main_scene: Node = root.get_child(-1)
+	loaded_scene.append(main_scene)
+	loaded_scene_index += 1
 
-func goto_scene(path):
-	# This function will usually be called from a signal callback,
-	# or some other function in the current scene.
-	# Deleting the current scene at this point is
-	# a bad idea, because it may still be executing code.
-	# This will result in a crash or unexpected behavior.
+func goto_scene(scene: PackedScene):
+	_deferred_goto_scene.call_deferred(scene)
 
-	# The solution is to defer the load to a later time, when
-	# we can be sure that no code from the current scene is running:
-
-	_deferred_goto_scene.call_deferred(path)
-
-
-func _deferred_goto_scene(path: String):
-	main_scene.process_mode = ProcessMode.PROCESS_MODE_DISABLED
-
-	# Load the new scene.
-	var s = ResourceLoader.load(path)
+func _deferred_goto_scene(scene: PackedScene):
+	loaded_scene[loaded_scene_index].process_mode = ProcessMode.PROCESS_MODE_DISABLED
 
 	# Instantiate the new scene.
-	loaded_scene = s.instantiate()
-	get_tree().root.add_child(loaded_scene)
-	get_tree().current_scene = loaded_scene
+	loaded_scene.append( scene.instantiate())
+	loaded_scene_index += 1
+	get_tree().root.add_child(loaded_scene[loaded_scene_index])
+	get_tree().current_scene = loaded_scene[loaded_scene_index]
+	_activate_player_camera(loaded_scene[loaded_scene_index])
+	
 
 func goback_scene():
-	loaded_scene.queue_free()
-	if main_scene.has_node("Player"):
-		main_scene.get_node("Player").make_camera_active()
-		
-	main_scene.process_mode = ProcessMode.PROCESS_MODE_ALWAYS
+	loaded_scene_index -= 1
+	
+	_activate_player_camera(loaded_scene[loaded_scene_index]) # Activate camera on previous scene
+	loaded_scene[loaded_scene_index + 1].queue_free() # Delete most recently added scene
+	loaded_scene.pop_back()
+	loaded_scene[loaded_scene_index].process_mode = ProcessMode.PROCESS_MODE_ALWAYS # Enable process mode on previous scene
+
+func _activate_player_camera(scene: Node):
+	if scene.has_node("Player"):
+		scene.get_node("Player").make_camera_active()
