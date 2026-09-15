@@ -1,11 +1,15 @@
 extends Area2D
 
-### SCENE SWITCH ###
-####################
+### GO A SCENE BACK ###
+#######################
+@export var go_back_a_scene: bool = false
 
-@export var go_to_dialog: bool = false
+### GO TO SCENE ###
+###################
+
+@export var go_to_scene: bool = false
 @export var npc_index: int = 0
-@export_global_file("*.tscn") var dialog: String = "res://scenes/dialog.tscn"
+@export var scene: PackedScene = null
 
 var inside_area: bool = false
 var player_body: Node2D = null
@@ -32,9 +36,9 @@ func _process(delta: float) -> void:
 
 func _process_input() -> void:
 	if Input.is_action_just_pressed("GB_B") and inside_area:
-		if go_to_dialog and player_body:
+		if go_to_scene and player_body:
 			Global.selected_npc = npc_index
-			Global.goto_scene(dialog)
+			Global.goto_scene(scene)
 
 		if enable_popup and !popup_currently_active:
 			popup_currently_active = true
@@ -43,6 +47,9 @@ func _process_input() -> void:
 		elif enable_popup and popup_currently_active:
 			popup_currently_active = false
 			player.hide_popup()
+		
+		if go_back_a_scene:
+			Global.goback_scene()
 
 func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
