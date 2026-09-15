@@ -83,10 +83,6 @@ region = Rect2(200, 120, 50, 40)
 atlas = ExtResource("2_bnbr5")
 region = Rect2(100, 40, 50, 40)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_dvr47"]
-atlas = ExtResource("2_bnbr5")
-region = Rect2(150, 40, 50, 40)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_noj0v"]
 atlas = ExtResource("2_bnbr5")
 region = Rect2(0, 0, 50, 40)
@@ -202,9 +198,6 @@ animations = [{
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_wk5fe")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_dvr47")
 }],
 "loop": 1,
 "name": &"start jump",
@@ -240,8 +233,7 @@ shape = SubResource("RectangleShape2D_i0ujt")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="." unique_id=2093633842]
 sprite_frames = SubResource("SpriteFrames_bnbr5")
-animation = &"jump to flying"
-frame_progress = 0.09827227
+animation = &"start jump"
 
 [node name="CameraRig" type="Node2D" parent="." unique_id=320918911]
 

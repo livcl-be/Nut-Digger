@@ -36,7 +36,7 @@ const WALK_ACCELERATION: float = 133.59375
 const WALK_FRICTION: float = 500.8125
 
 # Dash movement
-const DASH_DURATION: float = 0.1
+const DASH_DURATION: float = 0.133
 const DASH_TIMEOUT: float = 0.5
 const DASH_VELOCITY: float = 400
 
@@ -44,6 +44,8 @@ const DASH_VELOCITY: float = 400
 const JUMP_SPEED: int = -240
 const LONG_JUMP_GRAVITY: int = 450
 const GRAVITY: int = 1100
+
+const COYOTE_TIME_DURATION: float = 0.07
 
 const START_JUMPING_TIME: float = 0.5
 
@@ -67,6 +69,9 @@ var is_jumping: bool = false
 var is_start_jumping: bool = false
 var is_falling: bool = false
 var is_dashing: bool = false
+
+var coyote_active: bool = false
+var jumped_during_coyote: bool = false
 
 var input_axis: Vector2 = Vector2.ZERO
 var speed_scale: float = 0.0
@@ -122,6 +127,8 @@ func _on_sprite_animation_finished() -> void:
 		if animation_name == "start jump":
 			is_start_jumping = false
 			is_jumping = true
+			coyote_active = false
+			jumped_during_coyote = true
 		elif animation_name == "jump" and is_falling:
 			sprite.speed_scale = SPRITE_IDLE_SPEED * 20
 			sprite.play("jump to flying")
@@ -144,10 +151,12 @@ func process_input():
 	input_axis.y = - Input.get_action_strength("GB_up")
 
 func process_jump(delta: float):
-	if is_on_floor():
+	if is_on_floor() or coyote_active or jumped_during_coyote:
+		jumped_during_coyote = false
+		
 		var jump_pressed: bool = Input.is_action_pressed("GB_up")
 		
-		if not jump_pressed and is_start_jumping:
+		if !jump_pressed:
 			is_start_jumping = false
 			is_jumping = false
 		elif jump_pressed and !is_start_jumping and !is_jumping:
@@ -164,7 +173,12 @@ func process_jump(delta: float):
 		else:
 			is_start_jumping = false
 
-		velocity.y = velocity.y + gravity * delta
+		if !coyote_active and !is_start_jumping and !is_falling and !is_jumping:
+			coyote_active = true
+			get_tree().create_timer(COYOTE_TIME_DURATION).timeout.connect(_coyote_time_done)
+
+		if !coyote_active or is_jumping or is_start_jumping:
+			velocity.y = velocity.y + gravity * delta
 
 		if velocity.y > MAX_FALL_SPEED:
 			velocity.y = MAX_FALL_SPEED_CAP
@@ -177,7 +191,12 @@ func process_jump(delta: float):
 		
 		if input_axis.x == 0:
 			velocity.x = 0
-		
+
+func _coyote_time_done():
+	coyote_active = false
+	if !is_on_floor() and !is_jumping:
+		is_falling = true
+	
 func process_walk(delta: float):
 	if input_axis.x:
 		if velocity.x:
@@ -192,10 +211,12 @@ func process_walk(delta: float):
 			# Walking in the same direction as the velocity
 			acceleration = WALK_ACCELERATION
 			var target_speed: float = input_axis.x * MAX_SPEED
-			velocity.x = move_toward(velocity.x, target_speed, acceleration * delta)
+			var percentage_of_max_speed: float = abs(velocity.x)/MAX_SPEED
+			var acceleration_factor: float = (-percentage_of_max_speed**2 + 1) * 2
+			velocity.x = move_toward(velocity.x, target_speed, (1 + acceleration_factor) * acceleration * delta)
 		else:
 			# Walking opposite to the velocity, first get to zero velocity
-			velocity.x = move_toward(velocity.x, 0.0, deacceleration * delta)
+			velocity.x = move_toward(velocity.x, 0.0, deacceleration * delta * 3)
 
 
 	elif is_on_floor() and velocity.x:
@@ -249,8 +270,13 @@ func process_animation():
 		sprite.play("idle")
 
 func process_camera_rig(delta: float):
-	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * delta * 7
-	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * delta * 7
+	var x_percentage = abs(camera_rig.position.x)/CAMERA_HORIZONTAL_CLIP
+	var x_acceleration_factor: float = -x_percentage**2 + 1.2
+	camera_rig.position.x += input_axis.x * CAMERA_HORIZONTAL_OFFSET * delta * 7 * x_acceleration_factor
+
+	var y_percentage = abs(camera_rig.position.y)/CAMERA_VERTICAL_CLIP
+	var y_acceleration_factor: float = -y_percentage**2 + 1.2
+	camera_rig.position.y += input_axis.y * CAMERA_VERTICAL_OFFSET * delta * 7 * y_acceleration_factor
 	
 	# Clipping
 	if CAMERA_HORIZONTAL_CLIP < abs(camera_rig.position.x):
