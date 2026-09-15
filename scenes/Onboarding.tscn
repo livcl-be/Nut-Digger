@@ -331,3 +331,9 @@ collision_enabled = false
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_1vp0e")]
 position = Vector2(-817, -277)
+
+[node name="ActionArea" parent="." unique_id=998399140 instance=ExtResource("7_0fmyi")]
+position = Vector2(1642, 109)
+on_key_press = false
+dark_forest_trigger = true
+dark_forest_message_if_no_lamp = "So the 'dark forest' name is pretty literal huh, maybe the locals have some fireflies I can use to see."
