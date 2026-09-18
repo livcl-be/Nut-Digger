@@ -12,12 +12,18 @@ extends Node2D
 @onready var answer_choise_3: TextureRect = $UI/Answers/Choises/AnswerChoise3
 
 # Images of npc's
+@export_group("Character images")
 @export var NPC_AUGUST_IMAGE: Texture2D = null
 @export var NPC_BILLIE_IMAGE: Texture2D = null
 @export var NPC_FRANCIS_IMAGE: Texture2D = null
 @export var NPC_SHOPKEEPER_IMAGE: Texture2D = null
 
+# End scene
+@export_group("End scenes")
+@export var END_SCENE: PackedScene = null
+
 # Images of answer highlights
+@export_group("Dialog selected answer highlighting")
 @export var ANSWER_HIGHLIGHTED: Texture2D = null
 @export var ANSWER_NOT_HIGHLIGHTED: Texture2D = null
 
@@ -30,6 +36,7 @@ var current_shop_progress: shop_progress = shop_progress.NEUTRAL
 enum progress {NEUTRAL, FIREFLIES, WHO, LETS, PROPOSE}
 var current_progress: progress = progress.NEUTRAL
 var current_question: int = 0
+var asking_question: bool = false
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
@@ -143,9 +150,13 @@ func _update_dialog() -> void:
 				if talked[selected_npc]: # Already talked to this npc
 					show_question_dialog("I think that we have talked enough.")
 					show_answer_dialog(["Go to start", "Close dialog", ""])
-				else:
+				elif !asking_question:
 					show_question_dialog(dialog[selected_npc]["questions"][current_question])
 					show_answer_dialog(dialog[selected_npc]["answers"][current_question])
+				else:
+					
+					show_question_dialog(dialog[selected_npc]["neutral answer"])
+					show_answer_dialog(["Go to start", "Close dialog", ""])
 			
 			progress.PROPOSE:
 				if !talked[selected_npc]: # Did not talk to this npc
@@ -188,7 +199,8 @@ func _update_dialog() -> void:
 				show_question_dialog(dialog[selected_npc]["ring"])
 				show_answer_dialog(["Bet", "Sell ring", ""])
 
-	
+func display_end_scene():
+	Global.goto_end_scene(END_SCENE)
 			
 func show_question_dialog(question: String):
 	question_label.text = question
@@ -213,7 +225,8 @@ func _enter_input():
 				progress.LETS:
 					if talked[selected_npc]: # Already talked to this npc
 						end_of_dialog_tree()
-					else:
+					elif !asking_question:
+						asking_question = true
 						if selected_input == dialog[selected_npc]["correct_answers"][current_question]:
 							npc_points[selected_npc] += 1
 						elif !(selected_npc == 2 and current_question == 1) and current_question != 2 and selected_input == dialog[selected_npc]["incorrect_answers"][current_question]:
@@ -222,6 +235,10 @@ func _enter_input():
 						current_question += 1
 						if current_question > 2:
 							talked[selected_npc] = true
+					else:
+						asking_question = false
+						end_of_dialog_tree()
+						
 							
 				progress.PROPOSE:
 					if !talked[selected_npc]:
@@ -230,7 +247,7 @@ func _enter_input():
 					elif npc_points[selected_npc] < 0:
 						end_of_dialog_tree()
 					elif selected_input == 0:
-						pass # TODO end game: marry npc
+						display_end_scene()
 		else:
 			match current_shop_progress:
 				shop_progress.NEUTRAL:
@@ -243,8 +260,10 @@ func _enter_input():
 				shop_progress.TIP: end_of_dialog_tree()
 				shop_progress.RING:
 					match selected_input:
-						0: pass # TODO end game: Bet ring
-						1: pass # TODO end game: Sell ring
+						0: display_end_scene()
+						1:
+							Global.sold_ring = true
+							display_end_scene()
 
 		selected_input = 0
 		_update_highlighted_choise()

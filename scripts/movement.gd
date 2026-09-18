@@ -41,6 +41,7 @@ const DASH_TIMEOUT: float = 0.5
 const DASH_VELOCITY: float = 400
 
 # Moving vertical
+const MINIMUM_JUMP_SPEED: int = -50
 const JUMP_SPEED: int = -200
 const LONG_JUMP_GRAVITY: int = 340
 const GRAVITY: int = 1100
@@ -67,6 +68,8 @@ var is_jumping: bool = false
 var is_start_jumping: bool = false
 var is_falling: bool = false
 var is_dashing: bool = false
+
+var little_jump: bool = false
 
 var coyote_active: bool = false
 var jumped_during_coyote: bool = false
@@ -123,6 +126,10 @@ func _on_sprite_animation_finished() -> void:
 			is_jumping = true
 			coyote_active = false
 			jumped_during_coyote = true
+			
+			if !Input.is_action_pressed("GB_up"):
+				little_jump = true
+				
 		elif animation_name == "jump" and is_falling:
 			sprite.speed_scale = SPRITE_IDLE_SPEED * 20
 			sprite.play("jump to flying")
@@ -150,7 +157,10 @@ func process_jump(delta: float):
 		
 		var jump_pressed: bool = Input.is_action_pressed("GB_up")
 		
-		if !jump_pressed:
+		if !jump_pressed and (is_start_jumping or is_jumping or little_jump):
+			little_jump = false
+			velocity.y = MINIMUM_JUMP_SPEED
+		elif !jump_pressed:
 			is_start_jumping = false
 			is_jumping = false
 		elif jump_pressed and !is_start_jumping and !is_jumping:

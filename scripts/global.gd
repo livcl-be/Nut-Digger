@@ -5,6 +5,7 @@ var loaded_scene_index: int = -1
 var disable_scene_switching: bool = false
 
 var has_ring: bool = false
+var sold_ring: bool = false
 var collected_fireflies: int = 0
 
 # Dialog non volatile variables
@@ -55,7 +56,19 @@ func _deferred_goto_scene(scene: PackedScene):
 	get_tree().root.add_child(loaded_scene[loaded_scene_index])
 	get_tree().current_scene = loaded_scene[loaded_scene_index]
 	_activate_player_camera(loaded_scene[loaded_scene_index])
-	
+
+func goto_end_scene(scene: PackedScene):
+	_deferred_goto_end_scene.call_deferred(scene)
+
+func _deferred_goto_end_scene(scene: PackedScene):
+	while (loaded_scene_index > -1):
+		loaded_scene[loaded_scene_index].queue_free()
+		loaded_scene_index -= 1
+
+	# Instantiate the new scene.
+	var end_scene: Node =  scene.instantiate()
+	get_tree().root.add_child(end_scene)
+	get_tree().current_scene = end_scene
 
 func goback_scene():
 	loaded_scene_index -= 1
@@ -94,3 +107,6 @@ func _get_velocity(scene_index: int) -> Vector2:
 		var player: CharacterBody2D = scene.get_node("Player")
 		return player.velocity
 	return Vector2.ZERO
+
+func get_active_scene() -> Node:
+	return loaded_scene[loaded_scene_index]

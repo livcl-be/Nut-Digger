@@ -9,6 +9,11 @@
 [ext_resource type="Texture2D" uid="uid://gic03x12d0vc" path="res://assets/dialog/Dialogue_francis.png" id="4_ygo2i"]
 [ext_resource type="Texture2D" uid="uid://c4mp0cj707cjr" path="res://assets/dialog/Dialogue shopkeeper.png" id="5_0535s"]
 [ext_resource type="Texture2D" uid="uid://dq3myy2g7e7i" path="res://assets/dialog/Dalogue_buttons_neutral.png" id="5_lar43"]
+[ext_resource type="Texture2D" uid="uid://5jckvkcdi8hq" path="res://assets/Screens/EndAugust.png" id="6_0535s"]
+[ext_resource type="PackedScene" uid="uid://cyrmy7je21qfp" path="res://objects/end_scenes.tscn" id="6_mm4l3"]
+[ext_resource type="Texture2D" uid="uid://b1nbtt51m3pg" path="res://assets/Screens/EndGambleWint.png" id="7_dekyc"]
+[ext_resource type="Texture2D" uid="uid://drua47b6ec5h6" path="res://assets/Screens/EndGambleLost.png" id="8_keeyk"]
+[ext_resource type="Texture2D" uid="uid://c1dh4vdn7vsgk" path="res://assets/Screens/EndSell.png" id="9_stlet"]
 
 [node name="Dialog" type="Node2D" unique_id=284389127]
 script = ExtResource("1_tmfn4")
@@ -16,6 +21,13 @@ NPC_AUGUST_IMAGE = ExtResource("2_owmcw")
 NPC_BILLIE_IMAGE = ExtResource("3_ygo2i")
 NPC_FRANCIS_IMAGE = ExtResource("4_ygo2i")
 NPC_SHOPKEEPER_IMAGE = ExtResource("5_0535s")
+END_SCENE = ExtResource("6_mm4l3")
+END_SCENE_BET_WIN = ExtResource("7_dekyc")
+END_SCENE_BET_LOSE = ExtResource("8_keeyk")
+END_SCENE_SELL = ExtResource("9_stlet")
+END_SCENE_AUGUST = ExtResource("6_0535s")
+END_SCENE_BILLIE = ExtResource("6_0535s")
+END_SCENE_FRANCIS = ExtResource("6_0535s")
 ANSWER_HIGHLIGHTED = ExtResource("4_auqi6")
 ANSWER_NOT_HIGHLIGHTED = ExtResource("5_lar43")
 

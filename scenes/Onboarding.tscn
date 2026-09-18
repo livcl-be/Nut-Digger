@@ -311,7 +311,7 @@ texture = ExtResource("12_w4n7r")
 
 [node name="ActionArea" parent="Environment/Retirement home/Note" unique_id=1690639494 instance=ExtResource("7_0fmyi")]
 enable_popup = true
-message = "Note to passerby: \\nIf Francis is lost again, tell him to look for the big arrow."
+message = "Note to passerby: If Francis is lost again, tell him to look for the big arrow."
 popup = ExtResource("10_3ag1x")
 
 [node name="DarkForest" type="Sprite2D" parent="Environment/Retirement home" unique_id=149852654]
