@@ -285,6 +285,7 @@ texture = ExtResource("10_6yu02")
 
 [node name="ActionArea" parent="Environment/Retirement home/Francis" unique_id=1983614221 instance=ExtResource("7_0fmyi")]
 position = Vector2(8.999999, 9.000001)
+scale = Vector2(-1, 1)
 go_to_scene = true
 npc_index = 2
 scene = ExtResource("15_ifx1g")

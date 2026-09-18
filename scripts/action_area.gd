@@ -46,8 +46,15 @@ var player_body: Node2D = null
 
 var popup_currently_active: bool = false
 var player: CharacterBody2D = null
+var interact_popup: Sprite2D = null
 
 func _ready() -> void:
+	interact_popup = $Image
+	
+	# Enable ring image
+	if receive_ring_upon_trigger:
+		$Ring.visible = true
+	
 	# Reuse popup logic for hardcoded darkforest trigger
 	if dark_forest_message_if_no_lamp != "":
 		message = dark_forest_message_if_no_lamp
@@ -90,10 +97,15 @@ func _execute_logic() -> void:
 		
 		if receive_ring_upon_trigger:
 			Global.collected_ring()
+			$Ring.visible = false
+			$Image.visible = false
 		
 	elif popup_conditional and popup_currently_active:
 		popup_currently_active = false
 		player.hide_popup()
+
+		if receive_ring_upon_trigger:
+			queue_free()
 	
 	# Hardcoded dark forest trigger
 	if dark_forest_trigger and Global.has_collected_all_fireflies():
@@ -105,6 +117,7 @@ func _on_body_entered(body: Node2D) -> void:
 	if body.name == "Player":
 		inside_area = true
 		player_body = body
+		interact_popup.visible = true
 		
 		# Execute logic when entering body if chosen
 		if !on_key_press:
@@ -113,3 +126,4 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_body_exited(body: Node2D) -> void:
 	if body.name == "Player":
 		inside_area = false
+		interact_popup.visible = false

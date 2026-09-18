@@ -138,7 +138,6 @@ func _update_dialog() -> void:
 					show_question_dialog(dialog[selected_npc]["fireflies"][1])
 				else:
 					show_question_dialog(dialog[selected_npc]["fireflies"][0])
-					Global.append_fireflies()
 				
 				show_answer_dialog(["Go to start", "Close dialog", ""])
 			
@@ -182,7 +181,7 @@ func _update_dialog() -> void:
 					show_answer_dialog(["I want to bet.", "Money tips?", "Close dialog"])
 					
 			shop_progress.BET:
-				Global.current_mission = Global.mission.FIREFLIES
+				Global.current_mission = Global.mission.FIREFLIES_3
 				show_question_dialog(dialog[selected_npc]["introduction"])
 				show_answer_dialog(["Go to start", "Close dialog", ""])
 				
@@ -218,7 +217,10 @@ func _enter_input():
 			match current_progress:
 				progress.NEUTRAL: current_progress = (selected_input + 1 + (1 if Global.has_collected_ring() else 0)) as progress
 				progress.FIREFLIES: # option 1: goto start; option 2: close
-					Global.gave_fireflies[selected_npc] = true
+					if !Global.gave_fireflies[selected_npc]:
+						Global.gave_fireflies[selected_npc] = true
+						Global.append_fireflies()
+					
 					end_of_dialog_tree()
 				progress.WHO: # option 1: goto start; option 2: close
 					end_of_dialog_tree()
