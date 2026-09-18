@@ -41,7 +41,7 @@ const DASH_TIMEOUT: float = 0.5
 const DASH_VELOCITY: float = 400
 
 # Moving vertical
-const MINIMUM_JUMP_SPEED: int = -50
+const MINIMUM_JUMP_SPEED: int = -200
 const JUMP_SPEED: int = -200
 const LONG_JUMP_GRAVITY: int = 340
 const GRAVITY: int = 1100

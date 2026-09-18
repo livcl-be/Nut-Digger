@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="9_73hij"]
 [ext_resource type="Texture2D" uid="uid://c6abfee54sh0d" path="res://assets/env/scratch.png" id="9_ews8m"]
 [ext_resource type="PackedScene" uid="uid://b56txhyqa28un" path="res://objects/receive_ring_popup.tscn" id="10_nu4vb"]
-[ext_resource type="Texture2D" uid="uid://d1niw3gkl3evf" path="res://assets/Ring.png" id="12_ews8m"]
 
 [sub_resource type="DrawableTexture2D" id="DrawableTexture2D_pu8e5"]
 
@@ -258,7 +257,7 @@ position = Vector2(511, -187)
 texture = ExtResource("9_ews8m")
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("3_xqa88")]
-position = Vector2(-290, 5)
+position = Vector2(347, -900)
 CAMERA_MOVED_UPWARDS = 10.0
 
 [node name="ExitDarkForest" parent="." unique_id=2063205134 instance=ExtResource("9_73hij")]
@@ -283,7 +282,3 @@ receive_ring_upon_trigger = true
 enable_popup = true
 message = "Your received the ring."
 popup = ExtResource("10_nu4vb")
-
-[node name="Ring" type="Sprite2D" parent="." unique_id=1686318995]
-position = Vector2(626, -884)
-texture = ExtResource("12_ews8m")

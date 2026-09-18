@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://clkimyeb4n731"]
 
 [ext_resource type="Script" uid="uid://causmbibjbq84" path="res://scripts/action_area.gd" id="1_8xkxu"]
+[ext_resource type="Texture2D" uid="uid://c8fcpxhmr1m4k" path="res://assets/dialog/button2.png" id="2_bokp4"]
+[ext_resource type="Texture2D" uid="uid://d1niw3gkl3evf" path="res://assets/Ring.png" id="3_mwgw7"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_i0ujt"]
 
@@ -9,6 +11,16 @@ script = ExtResource("1_8xkxu")
 
 [node name="shape" type="CollisionShape2D" parent="." unique_id=169987390]
 shape = SubResource("RectangleShape2D_i0ujt")
+
+[node name="Image" type="Sprite2D" parent="." unique_id=1569693375]
+visible = false
+position = Vector2(0, -19)
+texture = ExtResource("2_bokp4")
+
+[node name="Ring" type="Sprite2D" parent="." unique_id=1328103452]
+visible = false
+position = Vector2(0, -5)
+texture = ExtResource("3_mwgw7")
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="body_exited" from="." to="." method="_on_body_exited"]

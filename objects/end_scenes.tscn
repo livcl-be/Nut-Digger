@@ -6,6 +6,8 @@
 [ext_resource type="Texture2D" uid="uid://b1nbtt51m3pg" path="res://assets/Screens/EndGambleWint.png" id="2_soyu7"]
 [ext_resource type="Texture2D" uid="uid://drua47b6ec5h6" path="res://assets/Screens/EndGambleLost.png" id="3_t8a7e"]
 [ext_resource type="Texture2D" uid="uid://c1dh4vdn7vsgk" path="res://assets/Screens/EndSell.png" id="4_nyamo"]
+[ext_resource type="Texture2D" uid="uid://dph3ww1wk04tq" path="res://assets/Screens/EndBillie.png" id="6_nyamo"]
+[ext_resource type="Texture2D" uid="uid://dne1rtgwmp2ff" path="res://assets/Screens/EndFranic.png" id="7_vftt1"]
 
 [node name="Popup" type="Control" unique_id=991040805]
 layout_mode = 3
@@ -18,6 +20,8 @@ END_SCENE_BET_WIN = ExtResource("2_soyu7")
 END_SCENE_BET_LOSE = ExtResource("3_t8a7e")
 END_SCENE_SELL = ExtResource("4_nyamo")
 END_SCENE_AUGUST = ExtResource("1_uydxp")
+END_SCENE_BILLIE = ExtResource("6_nyamo")
+END_SCENE_FRANCIS = ExtResource("7_vftt1")
 
 [node name="Image" type="TextureRect" parent="." unique_id=322103940]
 layout_mode = 1
