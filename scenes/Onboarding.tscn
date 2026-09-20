@@ -22,6 +22,8 @@
 [ext_resource type="PackedScene" uid="uid://dqtvo38rfvqho" path="res://scenes/home_billie.tscn" id="14_d0fdg"]
 [ext_resource type="Texture2D" uid="uid://dgl4ye712d40s" path="res://assets/env/Retirement/Pipey.png" id="14_l4mat"]
 [ext_resource type="PackedScene" uid="uid://bjnqhwwo1j0e0" path="res://scenes/home_francis.tscn" id="15_ifx1g"]
+[ext_resource type="Texture2D" uid="uid://c52cn6e1ar4cd" path="res://assets/env/shopkeper anim/shopkeeper2.png" id="15_mp8dx"]
+[ext_resource type="Texture2D" uid="uid://bwa863gfedloa" path="res://assets/env/shopkeper anim/shopkeeper3.png" id="16_k0q7q"]
 [ext_resource type="PackedScene" uid="uid://bps3yfieqhkj4" path="res://scenes/DarkForest.tscn" id="20_ifx1g"]
 [ext_resource type="Texture2D" uid="uid://dfqgd484ge7fn" path="res://assets/env/Retirement/Pipe.png" id="20_or545"]
 
@@ -197,6 +199,23 @@ size = Vector2(26, 247)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61l7n"]
 size = Vector2(12, 40)
 
+[sub_resource type="SpriteFrames" id="SpriteFrames_i0ujt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_qxghj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_mp8dx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_k0q7q")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="base" type="Node2D" unique_id=815438163]
 
 [node name="Environment" type="Node2D" parent="." unique_id=1656743426]
@@ -243,10 +262,6 @@ texture = ExtResource("3_va6qp")
 position = Vector2(13, -22)
 rotation = -1.5707964
 texture = ExtResource("4_q2njs")
-
-[node name="Shopkeeper1" type="Sprite2D" parent="Environment/Slums" unique_id=769704357]
-position = Vector2(-762, -16)
-texture = ExtResource("3_qxghj")
 
 [node name="Shop" type="Sprite2D" parent="Environment/Slums" unique_id=328476641]
 position = Vector2(-762, 1)
@@ -303,6 +318,13 @@ texture = ExtResource("14_l4mat")
 [node name="Pipey2" type="Sprite2D" parent="Environment/Slums" unique_id=991941454]
 position = Vector2(1167, -52)
 texture = ExtResource("14_l4mat")
+
+[node name="ShopKeeper" type="AnimatedSprite2D" parent="Environment/Slums" unique_id=763749393]
+position = Vector2(-762, -16)
+sprite_frames = SubResource("SpriteFrames_i0ujt")
+autoplay = "default"
+frame_progress = 0.21814474
+speed_scale = 0.2
 
 [node name="Retirement home" type="Node2D" parent="Environment" unique_id=1630530550]
 

@@ -76,7 +76,7 @@ const dialog: Array[Variant] = [
 
 	{
 		"name": "Francis",
-		"introduction": "Alright… Hi, I'm Francis, I love nature and stuff... Oeh! And I'm always sniffing for some good deals on hiking gear!",
+		"introduction": "Alright... Hi, I'm Francis, I love nature and stuff... Oeh! And I'm always sniffing for some good deals on hiking gear!",
 		"neutral message": "What's up partner?",
 		"neutral answer": "I'll keep that in mind!",
 		"fireflies": ["Coming right up! Don't let them fly away! ", "Erm didn't I give 'em to ya earlier? Or did I forget something again?"],
@@ -104,6 +104,7 @@ func _ready() -> void:
 	selected_npc = Global.selected_npc
 	talked = Global.talked
 	npc_points = Global.npc_points
+	current_question = Global.talk_progress[selected_npc]
 	
 	match selected_npc:
 		0: npc_image.texture = NPC_AUGUST_IMAGE
@@ -119,6 +120,7 @@ func _process(delta: float) -> void:
 	
 	if update_gui:
 		_update_dialog()
+		Global.sound_effect_boop()
 
 func _update_dialog() -> void:
 	update_gui = false
@@ -176,12 +178,12 @@ func _update_dialog() -> void:
 				show_question_dialog(dialog[selected_npc]["neutral message"])
 
 				if Global.has_collected_ring():
-					show_answer_dialog(["I want to bet.", "Money tips?", "I have the ring"])
+					show_answer_dialog(["I have the ring", "", ""])
 				else:
 					show_answer_dialog(["I want to bet.", "Money tips?", "Close dialog"])
 					
 			shop_progress.BET:
-				Global.current_mission = Global.mission.FIREFLIES_3
+				Global.current_mission = Global.mission.DARK_FOREST
 				show_question_dialog(dialog[selected_npc]["introduction"])
 				show_answer_dialog(["Go to start", "Close dialog", ""])
 				
@@ -196,9 +198,10 @@ func _update_dialog() -> void:
 			
 			shop_progress.RING:
 				show_question_dialog(dialog[selected_npc]["ring"])
-				show_answer_dialog(["Bet", "Sell ring", ""])
+				show_answer_dialog(["Bet ring", "Sell ring", ""])
 
 func display_end_scene():
+	Global.sound_effect_success()
 	Global.goto_end_scene(END_SCENE)
 			
 func show_question_dialog(question: String):
@@ -233,8 +236,9 @@ func _enter_input():
 							npc_points[selected_npc] += 1
 						elif !(selected_npc == 2 and current_question == 1) and current_question != 2 and selected_input == dialog[selected_npc]["incorrect_answers"][current_question]:
 							npc_points[selected_npc] -= 1
-	
+						
 						current_question += 1
+						Global.talk_progress[selected_npc] = current_question
 						if current_question > 2:
 							talked[selected_npc] = true
 					else:
@@ -253,7 +257,11 @@ func _enter_input():
 		else:
 			match current_shop_progress:
 				shop_progress.NEUTRAL:
-					if selected_input < 2 or Global.has_collected_ring():
+					if Global.has_collected_ring() and selected_input == 0:
+						current_shop_progress = shop_progress.RING
+					elif Global.has_collected_ring():
+						pass
+					elif selected_input < 2 or Global.has_collected_ring():
 						current_shop_progress = selected_input + 1 as shop_progress
 					elif selected_input == 2 and !Global.has_collected_ring():
 						close_dialog()

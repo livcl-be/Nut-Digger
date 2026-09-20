@@ -14,16 +14,33 @@ var selected_npc: int = 0
 var gave_fireflies: Array[bool] = [false, false, false]
 var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
+var talk_progress: Array[int] = [0, 0, 0, 0]
 
 # Mission logic
-const missions: Array[Variant] = [["Gamble at stand"], ["Find Fireflies for Lamp: 3 remaining"], ["Find Fireflies for Lamp: 2 remaining"], ["Find Fireflies for Lamp: 1 remaining"], ["Find Ring"], ["Marry?", "Gamble Ring?"]]
-enum mission {GAMBLE, FIREFLIES_3, FIREFLIES_2, FIREFLIES_1, RING, MARRY_OR_GAMBLE}
+const missions: Array[Variant] = [["Gamble at stand"], ["Search dark forest"], ["Find Fireflies for Lamp: 3 remaining"], ["Find Fireflies for Lamp: 2 remaining"], ["Find Fireflies for Lamp: 1 remaining"], ["Find Ring"], ["Marry?", "Gamble Ring?"]]
+enum mission {GAMBLE, DARK_FOREST, FIREFLIES_3, FIREFLIES_2, FIREFLIES_1, RING, MARRY_OR_GAMBLE}
 var current_mission: mission = mission.GAMBLE
+
+# Music logic
+var audio_node: AudioStreamPlayer = null
+var sound_effect_node: AudioStreamPlayer = null
+var normal_bg_music: AudioStream = preload("res://assets/OnboardingSong.wav")
+var forest_bg_music: AudioStream = preload("res://assets/DarkForestSong.wav")
+var boop_stream: AudioStream = preload("res://assets/sound_effects/baboop.mp3")
+var success_stream: AudioStream = preload("res://assets/sound_effects/success.wav")
+
+func sound_effect_boop():
+	sound_effect_node.stream = boop_stream
+	sound_effect_node.play()
+
+func sound_effect_success():
+	sound_effect_node.stream = success_stream
+	sound_effect_node.play()
 
 func append_fireflies() -> void:
 	collected_fireflies += 1
 	
-	current_mission = (collected_fireflies + 1) as mission
+	current_mission = (collected_fireflies + 2) as mission
 	
 	if has_collected_all_fireflies():
 		current_mission = mission.RING
@@ -44,12 +61,27 @@ func _ready():
 	var main_scene: Node = root.get_child(-1)
 	loaded_scene.append(main_scene)
 	loaded_scene_index += 1
+	
+	audio_node = AudioStreamPlayer.new()
+	audio_node.autoplay = true
+	audio_node.stream = normal_bg_music
+	audio_node.finished.connect(Callable(self, "_on_loop_sound").bind(audio_node))
+	root.add_child.call_deferred(audio_node)
+	
+	sound_effect_node = AudioStreamPlayer.new()
+	sound_effect_node.stream = boop_stream
+	get_tree().root.add_child.call_deferred(sound_effect_node)
+	
+
+func _on_loop_sound(player):
+	player.play()
 
 func goto_scene(scene: PackedScene):
 	if !disable_scene_switching:
 		_deferred_goto_scene.call_deferred(scene)
 
 func _deferred_goto_scene(scene: PackedScene):
+	sound_effect_boop()
 	loaded_scene[loaded_scene_index].process_mode = ProcessMode.PROCESS_MODE_DISABLED
 
 	# Instantiate the new scene.
@@ -58,6 +90,11 @@ func _deferred_goto_scene(scene: PackedScene):
 	get_tree().root.add_child(loaded_scene[loaded_scene_index])
 	get_tree().current_scene = loaded_scene[loaded_scene_index]
 	_activate_player_camera(loaded_scene[loaded_scene_index])
+
+	# Update music between onboarding and dark forest
+	if loaded_scene[loaded_scene_index].name == "DarkForest":
+		audio_node.stream = forest_bg_music
+		audio_node.play()
 
 func goto_end_scene(scene: PackedScene):
 	_deferred_goto_end_scene.call_deferred(scene)
@@ -73,7 +110,13 @@ func _deferred_goto_end_scene(scene: PackedScene):
 	get_tree().current_scene = end_scene
 
 func goback_scene():
+	sound_effect_boop()
 	loaded_scene_index -= 1
+	
+	# Update music between onboarding and dark forest
+	if loaded_scene[loaded_scene_index + 1].name == "DarkForest":
+		audio_node.stream = normal_bg_music
+		audio_node.play()
 	
 	_activate_player_camera(loaded_scene[loaded_scene_index]) # Activate camera on previous scene
 	loaded_scene[loaded_scene_index + 1].queue_free() # Delete most recently added scene

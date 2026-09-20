@@ -92,8 +92,13 @@ func _execute_logic() -> void:
 	# Popup logic
 	var popup_conditional: bool = enable_popup or (dark_forest_trigger and !Global.has_collected_all_fireflies())
 	if popup_conditional and !popup_currently_active:
+		Global.sound_effect_boop()
+		if dark_forest_trigger:
+			Global.current_mission = (Global.collected_fireflies + 2) as Global.mission
+		
 		popup_currently_active = true
 		player.show_popup(message, popup)
+		interact_popup.visible = false
 		
 		if receive_ring_upon_trigger:
 			Global.collected_ring()
@@ -102,6 +107,7 @@ func _execute_logic() -> void:
 		
 	elif popup_conditional and popup_currently_active:
 		popup_currently_active = false
+		interact_popup.visible = true
 		player.hide_popup()
 
 		if receive_ring_upon_trigger:
