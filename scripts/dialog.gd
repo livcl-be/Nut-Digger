@@ -50,13 +50,13 @@ const dialog: Array[Variant] = [
 		"name": "August",
 		"introduction": "Oh okay, my name is August, uhm, It's been so long since I did this!... Ah! I like baking pies and a nice sweet tea in the morning!",
 		"neutral message": "How's it going sweety?",
-		"neutral answer": "Oooh alright…",
+		"neutral answer": "Oooh alright...",
 		"fireflies": ["Of course, here you go honey.", "Oh I already gave them to you, remember? It's okay sweety we all forget things sometimes."],
 		"questions": ["What's your favourite dessert?", "Could you help me with my groceries Friday? I've been having a hard time getting them up here...", "What do you think is important in life?"],
 		"answers": [["Tiramisu", "I don't like sweets", "Macarons"], ["I don't know yet","Of course!","No, sorry"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
 		"correct_answers": [2, 1, 0],
 		"incorrect_answers": [1, 2],
-		"proposal": ["Oh sweety… I think you got the wrong idea...", "Oh, euhm okay yeah let's do it!", "YES YES 1000x YES!"],
+		"proposal": ["Oh sweety... I think you got the wrong idea...", "Oh, euhm okay yeah let's do it!", "YES YES 1000x YES!"],
 		"inheritance": 4000,
 	},
 
@@ -65,7 +65,7 @@ const dialog: Array[Variant] = [
 		"introduction": "Name's Billie, been on this earth for 8 whole years. Used to love golfin', but can't no more cuz of my back.",
 		"neutral message": "What do you want?",
 		"neutral answer": "I see",
-		"fireflies": ["Here take em', they're a hassle to take care of anyways…", "Don't come asking stupid questions now, Don't have 'em no more!"],
+		"fireflies": ["Here take em', they're a hassle to take care of anyways...", "Don't come asking stupid questions now, Don't have 'em no more!"],
 		"questions": ["How much money ya got?", "Why are you really here? Chatting us all up?", "What do you think is important in life?"],
 		"answers": [["It's a secret", "I'm piss poor", "I prefer not to say"], ["I like old squirrels", "I'm looking for money","I want to marry"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
 		"correct_answers": [1, 1, 1],
@@ -79,9 +79,9 @@ const dialog: Array[Variant] = [
 		"introduction": "Alright… Hi, I'm Francis, I love nature and stuff... Oeh! And I'm always sniffing for some good deals on hiking gear!",
 		"neutral message": "What's up partner?",
 		"neutral answer": "I'll keep that in mind!",
-		"fireflies": ["Coming right up! Don't let them fly away! ", "Erm- didn't I give 'em to ya earlier? Or did I forget something again?"],
+		"fireflies": ["Coming right up! Don't let them fly away! ", "Erm didn't I give 'em to ya earlier? Or did I forget something again?"],
 		"questions": ["Do you prefer the forest or the lake?", "What kinds of jokes are the best?", "What do you think is important in life?"],
-		"answers": [["The forest","The lake","The indoors"], ["Knock-knock jokes", "Puns", "Little Johnny jokes"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
+		"answers": [["The forest","The lake","The indoors"], ["Knock knock jokes", "Puns", "Little Johnny jokes"], ["Enjoying the time I have", "Staying healthy", "Keeping loved ones safe"]],
 		"correct_answers": [1, 1, 2],
 		"incorrect_answers": [2],
 		"proposal": ["Oh dear, uhm, how can I say this nicely...", "Jeez louise, okay let's do it!", "What a lovely surprise, of course!"],
@@ -176,7 +176,7 @@ func _update_dialog() -> void:
 				show_question_dialog(dialog[selected_npc]["neutral message"])
 
 				if Global.has_collected_ring():
-					show_answer_dialog(["I want to bet.", "Money tips?", "Ring"])
+					show_answer_dialog(["I want to bet.", "Money tips?", "I have the ring"])
 				else:
 					show_answer_dialog(["I want to bet.", "Money tips?", "Close dialog"])
 					

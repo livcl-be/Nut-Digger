@@ -16,7 +16,7 @@ var talked: Array[bool] = [false, false, false]
 var npc_points: Array[int] = [0, 0, 0]
 
 # Mission logic
-const missions: Array[Variant] = [["Gamble"], ["Find Fireflies for Lamp: 3 remaining"], ["Find Fireflies for Lamp: 2 remaining"], ["Find Fireflies for Lamp: 1 remaining"], ["Find Ring"], ["Marry", "Gamble Ring"]]
+const missions: Array[Variant] = [["Gamble at stand"], ["Find Fireflies for Lamp: 3 remaining"], ["Find Fireflies for Lamp: 2 remaining"], ["Find Fireflies for Lamp: 1 remaining"], ["Find Ring"], ["Marry?", "Gamble Ring?"]]
 enum mission {GAMBLE, FIREFLIES_3, FIREFLIES_2, FIREFLIES_1, RING, MARRY_OR_GAMBLE}
 var current_mission: mission = mission.GAMBLE
 

@@ -39,7 +39,6 @@ polygon = PackedVector2Array(47.024796, -1.3907318, 48.01653, 11.589404, 8.34710
 [node name="Actions" type="Node" parent="." unique_id=125414528]
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("2_uhids")]
-visible = false
 position = Vector2(207, 131)
 CAMERA_MOVED_UPWARDS = 15.0
 is_facing_left = true

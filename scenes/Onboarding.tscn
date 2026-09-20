@@ -192,7 +192,7 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_4n1no")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_egdet"]
-size = Vector2(26, 129.6875)
+size = Vector2(26, 247)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_61l7n"]
 size = Vector2(12, 40)
@@ -262,7 +262,7 @@ position = Vector2(-815, -14)
 texture = ExtResource("5_5u0l0")
 
 [node name="Bug" type="Sprite2D" parent="Environment/Slums" unique_id=889415860]
-position = Vector2(-813, 20)
+position = Vector2(-827, 20)
 texture = ExtResource("6_gsm1p")
 
 [node name="ActionArea" parent="Environment/Slums/Bug" unique_id=602154627 instance=ExtResource("7_0fmyi")]
@@ -273,7 +273,7 @@ popup = ExtResource("10_3ag1x")
 [node name="StaticBody2D" type="StaticBody2D" parent="Environment/Slums" unique_id=809207475]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Environment/Slums/StaticBody2D" unique_id=749202162]
-position = Vector2(-660, -254.15625)
+position = Vector2(-660, -195.5)
 shape = SubResource("RectangleShape2D_egdet")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Environment/Slums/StaticBody2D" unique_id=827485927]
@@ -341,6 +341,7 @@ texture = ExtResource("10_6yu02")
 
 [node name="ActionArea" parent="Environment/Retirement home/August" unique_id=144234682 instance=ExtResource("7_0fmyi")]
 position = Vector2(7.9999995, 8.000001)
+scale = Vector2(-1, 1)
 go_to_scene = true
 scene = ExtResource("13_6yu02")
 
