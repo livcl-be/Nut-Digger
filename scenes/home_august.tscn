@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ct36ujvnwuqcg"]
 
-[ext_resource type="Texture2D" uid="uid://coshyc5bfl4ae" path="res://assets/env/Houses/AugustHouse.png" id="1_kblr5"]
+[ext_resource type="Texture2D" uid="uid://coshyc5bfl4ae" path="res://assets/env/AugustHouse.png" id="1_kblr5"]
 [ext_resource type="PackedScene" uid="uid://c8auxxr2pgt5q" path="res://objects/character.tscn" id="2_uhids"]
 [ext_resource type="Texture2D" uid="uid://df3cpe416hivx" path="res://assets/env/Retirement/hole.png" id="2_yxilm"]
 [ext_resource type="PackedScene" uid="uid://clkimyeb4n731" path="res://objects/action_area.tscn" id="3_yxilm"]
@@ -25,7 +25,8 @@ position = Vector2(120, 80)
 texture = ExtResource("1_kblr5")
 
 [node name="Hole" type="Sprite2D" parent="scene" unique_id=1028089981]
-position = Vector2(240, 132)
+position = Vector2(243, 132)
+scale = Vector2(-1, 1)
 texture = ExtResource("2_yxilm")
 
 [node name="Boundry" type="StaticBody2D" parent="." unique_id=404976048]
@@ -38,6 +39,7 @@ polygon = PackedVector2Array(47.024796, -1.3907318, 48.01653, 11.589404, 8.34710
 [node name="Actions" type="Node" parent="." unique_id=125414528]
 
 [node name="Player" parent="." unique_id=363534456 instance=ExtResource("2_uhids")]
+visible = false
 position = Vector2(207, 131)
 CAMERA_MOVED_UPWARDS = 15.0
 is_facing_left = true
@@ -48,7 +50,7 @@ go_to_scene = true
 scene = ExtResource("4_mahjx")
 
 [node name="Teapot_action" parent="." unique_id=1923495329 instance=ExtResource("3_yxilm")]
-position = Vector2(207, 133)
+position = Vector2(210, 133)
 enable_popup = true
 message = "A fine china teaset, the cups have golden rims."
 popup = ExtResource("4_reixx")
